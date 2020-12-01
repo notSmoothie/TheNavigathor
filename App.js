@@ -7,18 +7,31 @@
  */
 
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, ScrollView, Image} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Pressable,
+} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+
+import ChooseiCal from './src/components/ChooseiCal';
+import StyleSwitch from './src/components/StyleSwitch';
+import {NavigaThorMode, RetroMode} from './src/styles/MapStyles';
 
 const App: () => React$Node = () => {
   const [map, setMap] = useState();
   const [markers, setMarkers] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [latestMarker, setLatestMarker] = useState([]);
+  const [latestMarkerId, setLatestMarkerId] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [mapStyle, setMapStyle] = useState(NavigaThorMode);
 
-  function getRooms() {
-    return fetch('https://at.tuke.sk/api/room')
+  function getRooms(building) {
+    return fetch('https://at.tuke.sk/api/room?text='.concat(building))
       .then((response) => response.json())
       .then((responseJson) => {
         setRooms(responseJson);
@@ -27,9 +40,6 @@ const App: () => React$Node = () => {
         console.error(error);
       });
   }
-
-  //getRooms()
-  //console.log(rooms);
 
   function getMarkers() {
     return fetch('http://18.157.253.130:3000/markers')
@@ -42,301 +52,64 @@ const App: () => React$Node = () => {
       });
   }
 
-  const mapStyle = [
-    {
-      stylers: [
-        {
-          visibility: 'on',
-        },
-      ],
-    },
-    {
-      elementType: 'geometry',
-      stylers: [
-        {
-          visibility: 'on',
-        },
-      ],
-    },
-    {
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          visibility: 'on',
-        },
-      ],
-    },
-    {
-      elementType: 'labels.text.stroke',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'administrative',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#757575',
-        },
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'administrative.country',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#9e9e9e',
-        },
-      ],
-    },
-    {
-      featureType: 'landscape',
-      elementType: 'geometry.fill',
-      stylers: [
-        {
-          color: '#303030',
-        },
-      ],
-    },
-    {
-      featureType: 'landscape.man_made',
-      elementType: 'geometry.stroke',
-      stylers: [
-        {
-          color: '#ffd700',
-        },
-        {
-          weight: 2.5,
-        },
-      ],
-    },
-    {
-      featureType: 'poi',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'poi',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#757575',
-        },
-      ],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#181818',
-        },
-      ],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'geometry.fill',
-      stylers: [
-        {
-          color: '#167000',
-        },
-        {
-          saturation: -45,
-        },
-        {
-          visibility: 'on',
-        },
-        {
-          weight: 4,
-        },
-      ],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#616161',
-        },
-      ],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'labels.text.stroke',
-      stylers: [
-        {
-          color: '#1b1b1b',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'geometry.fill',
-      stylers: [
-        {
-          color: '#2c2c2c',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'labels.icon',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#8a8a8a',
-        },
-      ],
-    },
-    {
-      featureType: 'road.arterial',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#373737',
-        },
-      ],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#3c3c3c',
-        },
-        {
-          visibility: 'on',
-        },
-      ],
-    },
-    {
-      featureType: 'road.highway.controlled_access',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#4e4e4e',
-        },
-      ],
-    },
-    {
-      featureType: 'road.local',
-      elementType: 'geometry.fill',
-      stylers: [
-        {
-          color: '#1a1a1a',
-        },
-        {
-          saturation: -35,
-        },
-      ],
-    },
-    {
-      featureType: 'road.local',
-      elementType: 'geometry.stroke',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'road.local',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#ffd700',
-        },
-      ],
-    },
-    {
-      featureType: 'transit',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'transit',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#757575',
-        },
-      ],
-    },
-    {
-      featureType: 'water',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#000000',
-        },
-      ],
-    },
-    {
-      featureType: 'water',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#01a6f9',
-        },
-      ],
-    },
-  ];
-
-  const BuildingContent = (props) => {
-    return (
-      <View
-        style={{
-          height: 130,
-          width: 130,
-          marginLeft: 20,
-          borderWidth: 0.5,
-          borderColor: '#dddddd',
-        }}>
-        <View style={{flex: 1}}>
-          <Text>{props.name}</Text>
-        </View>
-        <View style={{flex: 1, paddingLeft: 10}}>
-          <Text>{props.description}</Text>
-        </View>
-      </View>
-    );
-  };
-
   function Overlay() {
     if (showOverlay) {
-      var name = '';
-      var description = '';
-      markers.map((marker) => {
-        if (marker.id == latestMarker.id) {
-          name = marker.title;
-          description = marker.description;
+      if (rooms == undefined || latestMarkerId == undefined) {
+        return null;
+      }
+
+      id = latestMarkerId;
+
+      const name = markers[id].title;
+      const description = markers[id].description;
+
+      var filteredRooms = rooms;
+      filteredRooms = filteredRooms.filter((element) => {
+        if (element.name != null && element.name.length > 0) {
+          return element;
         }
       });
 
+      filteredRooms = filteredRooms.sort(function (a, b) {
+        var roomNameA = a.roomType.name.toUpperCase();
+        var roomNameB = b.roomType.name.toUpperCase();
+        if (roomNameA < roomNameB) {
+          return -1;
+        }
+        if (roomNameA > roomNameB) {
+          return 1;
+        }
+
+        return 0;
+      });
+
+      var classroomsToRender = [];
+      for (let i = 0; i < filteredRooms.length; i++) {
+        if (
+          i == 0 ||
+          filteredRooms[i].roomType.idRoomType !=
+            filteredRooms[i - 1].roomType.idRoomType
+        ) {
+          classroomsToRender.push(
+            <Text style={{textAlign: 'center', fontSize: 20, padding: 5}}>
+              {filteredRooms[i].roomType.name}
+            </Text>,
+          );
+        }
+        classroomsToRender.push(
+          <Text style={{textAlign: 'center', padding: 5}}>
+            {filteredRooms[i].name} - ({filteredRooms[i].number})
+          </Text>,
+        );
+      }
+
       return (
         <View style={styles.footer}>
-          <ScrollView showsHorizontalScrollIndicator={false}>
-            <BuildingContent name={name} description={description} />
+          <Text style={{textAlign: 'center', padding: 5}}>
+            {name} - {description}
+          </Text>
+          <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
+            {classroomsToRender}
           </ScrollView>
         </View>
       );
@@ -344,6 +117,49 @@ const App: () => React$Node = () => {
       return null;
     }
   }
+
+  const changeMapStyle = () => {
+    if (mapStyle == NavigaThorMode) {
+      setMapStyle(RetroMode);
+    } else if (mapStyle == RetroMode) {
+      setMapStyle(NavigaThorMode);
+    }
+  };
+
+  const Settings = (mapStyle) => {
+    if (showSettings) {
+      return (
+        <View style={styles.settingsContainer}>
+          <Pressable
+            style={styles.settingsBack}
+            onPress={() => {
+              setShowSettings(false);
+            }}></Pressable>
+          <View style={styles.settings}>
+            <View style={styles.settingsMenu}>
+              <StyleSwitch
+                style={styles.menuButton}
+                mapStyle={changeMapStyle}></StyleSwitch>
+              <ChooseiCal style={styles.menuButton}></ChooseiCal>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <Pressable
+          style={styles.settingsIcon}
+          onPress={() => {
+            setShowSettings(true);
+          }}>
+          <Image
+            source={require('./src/assets/settings.png')}
+          />
+        </Pressable>
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <MapView
@@ -377,13 +193,22 @@ const App: () => React$Node = () => {
             zoom: 15.7,
           });
         }}
-        onMarkerPress={() => {
-          setShowOverlay(true);
-        }}
         onRegionChangeComplete={() => {
           map.setCamera({
             heading: -27.5,
           });
+        }}
+        onMarkerPress={(marker) => {
+          setShowOverlay(true);
+          map.animateCamera({
+            zoom: 17,
+            center: {
+              latitude: marker.nativeEvent.coordinate.latitude,
+              longitude: marker.nativeEvent.coordinate.longitude,
+            },
+          });
+          setLatestMarkerId(marker.nativeEvent.id - 1);
+          getRooms(markers[marker.nativeEvent.id - 1].title);
         }}
         customMapStyle={mapStyle}>
         {markers.map((marker) => (
@@ -396,20 +221,12 @@ const App: () => React$Node = () => {
             }}
             title={marker.title}
             description={marker.description}
-            onPress={(marker) => {
-              setLatestMarker(marker.nativeEvent);
-              map.animateCamera({
-                zoom: 17,
-                center: {
-                  latitude: marker.nativeEvent.coordinate.latitude,
-                  longitude: marker.nativeEvent.coordinate.longitude,
-                },
-              });
-            }}
+            image={require('./src/assets/location.png')}
           />
         ))}
       </MapView>
       <Overlay></Overlay>
+      <Settings currentMapStyle={mapStyle}></Settings>
     </View>
   );
 };
@@ -420,6 +237,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   body: {
+    position: 'absolute',
     width: '100%',
     height: '100%',
   },
@@ -432,6 +250,41 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignContent: 'center',
     justifyContent: 'center',
+  },
+  settingsContainer: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  settings: {
+    flex: 10,
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+  },
+  settingsBack: {
+    flex: 6,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  settingsMenu: {
+    flex: 1,
+  },
+  menuButton: {
+    padding: 10,
+    fontSize: 16,
+    textAlign: 'center',
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    borderColor: 'rgb(158, 158, 158)',
+  },
+  settingsIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  scrollFooter: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
 
