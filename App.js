@@ -7,17 +7,32 @@
  */
 
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, Image} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 const App: () => React$Node = () => {
   const [map, setMap] = useState();
   const [markers, setMarkers] = useState([]);
-  const [markerId, setMarkerId] = useState('');
+  const [rooms, setRooms] = useState([]);
+  const [latestMarker, setLatestMarker] = useState([]);
   const [showOverlay, setShowOverlay] = useState(false);
 
+  function getRooms() {
+    return fetch('https://at.tuke.sk/api/room')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setRooms(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  //getRooms()
+  //console.log(rooms);
+
   function getMarkers() {
-    return fetch('nah')
+    return fetch('http://18.157.253.130:3000/markers')
       .then((response) => response.json())
       .then((responseJson) => {
         setMarkers(responseJson);
@@ -29,11 +44,75 @@ const App: () => React$Node = () => {
 
   const mapStyle = [
     {
+      stylers: [
+        {
+          visibility: 'on',
+        },
+      ],
+    },
+    {
+      elementType: 'geometry',
+      stylers: [
+        {
+          visibility: 'on',
+        },
+      ],
+    },
+    {
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          visibility: 'on',
+        },
+      ],
+    },
+    {
+      elementType: 'labels.text.stroke',
+      stylers: [
+        {
+          visibility: 'off',
+        },
+      ],
+    },
+    {
       featureType: 'administrative',
       elementType: 'geometry',
       stylers: [
         {
+          color: '#757575',
+        },
+        {
           visibility: 'off',
+        },
+      ],
+    },
+    {
+      featureType: 'administrative.country',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#9e9e9e',
+        },
+      ],
+    },
+    {
+      featureType: 'landscape',
+      elementType: 'geometry.fill',
+      stylers: [
+        {
+          color: '#303030',
+        },
+      ],
+    },
+    {
+      featureType: 'landscape.man_made',
+      elementType: 'geometry.stroke',
+      stylers: [
+        {
+          color: '#ffd700',
+        },
+        {
+          weight: 2.5,
         },
       ],
     },
@@ -42,6 +121,69 @@ const App: () => React$Node = () => {
       stylers: [
         {
           visibility: 'off',
+        },
+      ],
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#757575',
+        },
+      ],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#181818',
+        },
+      ],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry.fill',
+      stylers: [
+        {
+          color: '#167000',
+        },
+        {
+          saturation: -45,
+        },
+        {
+          visibility: 'on',
+        },
+        {
+          weight: 4,
+        },
+      ],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#616161',
+        },
+      ],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.stroke',
+      stylers: [
+        {
+          color: '#1b1b1b',
+        },
+      ],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.fill',
+      stylers: [
+        {
+          color: '#2c2c2c',
         },
       ],
     },
@@ -55,10 +197,106 @@ const App: () => React$Node = () => {
       ],
     },
     {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#8a8a8a',
+        },
+      ],
+    },
+    {
+      featureType: 'road.arterial',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#373737',
+        },
+      ],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#3c3c3c',
+        },
+        {
+          visibility: 'on',
+        },
+      ],
+    },
+    {
+      featureType: 'road.highway.controlled_access',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#4e4e4e',
+        },
+      ],
+    },
+    {
+      featureType: 'road.local',
+      elementType: 'geometry.fill',
+      stylers: [
+        {
+          color: '#1a1a1a',
+        },
+        {
+          saturation: -35,
+        },
+      ],
+    },
+    {
+      featureType: 'road.local',
+      elementType: 'geometry.stroke',
+      stylers: [
+        {
+          visibility: 'off',
+        },
+      ],
+    },
+    {
+      featureType: 'road.local',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#ffd700',
+        },
+      ],
+    },
+    {
       featureType: 'transit',
       stylers: [
         {
           visibility: 'off',
+        },
+      ],
+    },
+    {
+      featureType: 'transit',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#757575',
+        },
+      ],
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#000000',
+        },
+      ],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#01a6f9',
         },
       ],
     },
@@ -89,7 +327,7 @@ const App: () => React$Node = () => {
       var name = '';
       var description = '';
       markers.map((marker) => {
-        if (marker.id == markerId) {
+        if (marker.id == latestMarker.id) {
           name = marker.title;
           description = marker.description;
         }
@@ -97,7 +335,7 @@ const App: () => React$Node = () => {
 
       return (
         <View style={styles.footer}>
-          <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
+          <ScrollView showsHorizontalScrollIndicator={false}>
             <BuildingContent name={name} description={description} />
           </ScrollView>
         </View>
@@ -106,7 +344,6 @@ const App: () => React$Node = () => {
       return null;
     }
   }
-
   return (
     <View style={styles.container}>
       <MapView
@@ -126,10 +363,19 @@ const App: () => React$Node = () => {
           });
           getMarkers();
         }}
+        toolbarEnabled={false}
         rotateEnabled={false}
         showsCompass={false}
         onPress={() => {
           setShowOverlay(false);
+          map.animateCamera({
+            heading: -27.5,
+            center: {
+              latitude: 48.733033959741185,
+              longitude: 21.24518905793565,
+            },
+            zoom: 15.7,
+          });
         }}
         onMarkerPress={() => {
           setShowOverlay(true);
@@ -151,7 +397,14 @@ const App: () => React$Node = () => {
             title={marker.title}
             description={marker.description}
             onPress={(marker) => {
-              setMarkerId(marker.nativeEvent.id);
+              setLatestMarker(marker.nativeEvent);
+              map.animateCamera({
+                zoom: 17,
+                center: {
+                  latitude: marker.nativeEvent.coordinate.latitude,
+                  longitude: marker.nativeEvent.coordinate.longitude,
+                },
+              });
             }}
           />
         ))}
@@ -175,7 +428,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderColor: 'rgb(158,158,158)',
     width: '100%',
-    height: '35%',
+    height: '40%',
     position: 'absolute',
     alignContent: 'center',
     justifyContent: 'center',
