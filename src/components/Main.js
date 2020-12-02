@@ -15,12 +15,13 @@ import StyleSwitch from './StyleSwitch';
 import {NavigaThorMode, RetroMode} from '../styles/MapStyles';
 
 const Main = (props) => {
-  const originalMarkers = props.markers
-  const originalRooms = props.rooms
+  const originalMarkers = props.markers;
+  const originalRooms = props.rooms;
+  const originalSchedule = props.schedule;
 
   const [map, setMap] = useState();
 
-  const [schedule, setSchedule] = useState([]);
+  const [schedule, setSchedule] = useState(originalSchedule);
 
   const [rooms, setRooms] = useState(originalRooms);
   const [buildingRooms, setBuildingRooms] = useState([]);
@@ -43,14 +44,6 @@ const Main = (props) => {
       const schedule = await FileSystem.readAsStringAsync(schedulePath);
       setSchedule(JSON.parse(schedule));
     }
-  }
-
-  function filterMarkersBySchedule() {
-    const filteredMarkers = markers.filter((element) => {
-      if (element.title == 0) {
-        return element;
-      }
-    });
   }
 
   function getRoomsInBuilding(id) {
@@ -102,14 +95,18 @@ const Main = (props) => {
             filteredRooms[i - 1].roomType.idRoomType
         ) {
           roomsToRender.push(
-            <Text key = {i} style={{textAlign: 'center', fontSize: 20, padding: 5}}>
+            <Text
+              key={i}
+              style={{textAlign: 'center', fontSize: 20, padding: 5}}>
               {filteredRooms[i].roomType.name}
             </Text>,
           );
         }
         roomsToRender.push(
           // very ugly workaround to fix froggery
-          <Text key = {filteredRooms.length + i} style={{textAlign: 'center', padding: 5}}>
+          <Text
+            key={filteredRooms.length + i}
+            style={{textAlign: 'center', padding: 5}}>
             {filteredRooms[i].name} - ({filteredRooms[i].number})
           </Text>,
         );
@@ -183,7 +180,6 @@ const Main = (props) => {
         provider={PROVIDER_GOOGLE}
         style={styles.body}
         onLayout={() => {
-          loadSchedule();
           map.setCamera({
             heading: -27.5,
             center: {

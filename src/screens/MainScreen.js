@@ -1,8 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Main from '../components/Main';
+import * as FileSystem from 'expo-file-system';
 
 const MainScreen = ({navigation}) => {
+  async function loadSchedule() {
+    const schedulePath = FileSystem.documentDirectory.concat(
+      'jsonizedIcs.json',
+    );
+    const fileInfo = await FileSystem.getInfoAsync(schedulePath);
+    if (fileInfo.exists) {
+      const schedule = await FileSystem.readAsStringAsync(schedulePath);
+      return(JSON.parse(schedule));
+    } else {
+      return []
+    }
+  }
+
   async function getRooms() {
     try {
       const response = await fetch(`https://at.tuke.sk/api/room`);
@@ -48,13 +62,14 @@ const MainScreen = ({navigation}) => {
   function FetchMultipleResourceAtOnce() {
     const Markers = useAsync(getMarkers);
     const Rooms = useAsync(getRooms);
+    const schedule = loadSchedule()
 
     if (Markers.loading == false && Rooms.loading == false) {
       return (
         <Main
           navigation={navigation}
           markers={Markers.value}
-          rooms={Rooms.value}></Main>
+          rooms={Rooms.value} schedule={schedule}></Main>
       );
     } else {
       return (
