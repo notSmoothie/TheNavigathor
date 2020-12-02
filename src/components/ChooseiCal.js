@@ -20,7 +20,7 @@ const ChooseiCal = (props) => {
 
       const icsFile = res.uri
       const cacheFilePath = FileSystem.documentDirectory.concat('jsonizedIcs.json');
-      
+
       const string = await convert(icsFile);
       FileSystem.writeAsStringAsync(cacheFilePath, JSON.stringify(string));
     } catch (err) {

@@ -41,18 +41,17 @@ const Main = (props) => {
     const fileInfo = await FileSystem.getInfoAsync(schedulePath);
     if (fileInfo.exists) {
       const schedule = await FileSystem.readAsStringAsync(schedulePath);
-      setSchedule(schedule);
+      setSchedule(JSON.parse(schedule));
     }
   }
 
-  // function filterMarkersBySchedule() {
-
-  //   const filteredMarkers = markers.filter((element) => {
-  //     if (element.title == 0) {
-  //       return element;
-  //     }
-  //   });
-  // }
+  function filterMarkersBySchedule() {
+    const filteredMarkers = markers.filter((element) => {
+      if (element.title == 0) {
+        return element;
+      }
+    });
+  }
 
   function getRoomsInBuilding(id) {
     const roomsInBuilding = rooms.filter((element) => {
@@ -213,6 +212,9 @@ const Main = (props) => {
         //   });
         // }}
         onMarkerPress={(marker) => {
+          schedule.map(e => {
+            console.log(e.location)
+          })
           getRoomsInBuilding(marker.nativeEvent.id - 1);
           setLatestMarkerId(marker.nativeEvent.id - 1);
           setShowFooter(true);
