@@ -260,10 +260,17 @@ const NavigaThorMode = [
 
 const RetroMode = [
   {
+    stylers: [
+      {
+        visibility: 'on',
+      },
+    ],
+  },
+  {
     elementType: 'geometry',
     stylers: [
       {
-        color: '#ebe3cd',
+        visibility: 'on',
       },
     ],
   },
@@ -271,7 +278,7 @@ const RetroMode = [
     elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#523735',
+        visibility: 'on',
       },
     ],
   },
@@ -279,51 +286,16 @@ const RetroMode = [
     elementType: 'labels.text.stroke',
     stylers: [
       {
-        color: '#f5f1e6',
+        visibility: 'off',
       },
     ],
   },
   {
     featureType: 'administrative',
-    elementType: 'geometry.stroke',
-    stylers: [
-      {
-        color: '#c36f41',
-      },
-    ],
-  },
-  {
-    featureType: 'administrative.land_parcel',
-    elementType: 'geometry.stroke',
-    stylers: [
-      {
-        color: '#dcd2be',
-      },
-    ],
-  },
-  {
-    featureType: 'administrative.land_parcel',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#ae9e90',
-      },
-    ],
-  },
-  {
-    featureType: 'landscape.natural',
     elementType: 'geometry',
     stylers: [
       {
-        color: '#dfd2ae',
-      },
-    ],
-  },
-  {
-    featureType: 'poi',
-    stylers: [
-      {
-        color: '#ffeb3b',
+        color: '#757575',
       },
       {
         visibility: 'off',
@@ -331,11 +303,40 @@ const RetroMode = [
     ],
   },
   {
-    featureType: 'poi',
-    elementType: 'geometry',
+    featureType: 'administrative.country',
+    elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#dfd2ae',
+        color: '#9e9e9e',
+      },
+    ],
+  },
+  {
+    featureType: 'landscape',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#303030',
+      },
+    ],
+  },
+  {
+    featureType: 'landscape.man_made',
+    elementType: 'geometry.stroke',
+    stylers: [
+      {
+        color: '#000000',
+      },
+      {
+        weight: 2.5,
+      },
+    ],
+  },
+  {
+    featureType: 'poi',
+    stylers: [
+      {
+        visibility: 'off',
       },
     ],
   },
@@ -344,7 +345,16 @@ const RetroMode = [
     elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#93817c',
+        color: '#757575',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [
+      {
+        color: '#181818',
       },
     ],
   },
@@ -353,7 +363,16 @@ const RetroMode = [
     elementType: 'geometry.fill',
     stylers: [
       {
-        color: '#a5b076',
+        color: '#1c1c1c',
+      },
+      {
+        saturation: -45,
+      },
+      {
+        visibility: 'on',
+      },
+      {
+        weight: 4,
       },
     ],
   },
@@ -362,16 +381,43 @@ const RetroMode = [
     elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#447530',
+        color: '#616161',
+      },
+    ],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'labels.text.stroke',
+    stylers: [
+      {
+        color: '#1b1b1b',
       },
     ],
   },
   {
     featureType: 'road',
-    elementType: 'geometry',
+    elementType: 'geometry.fill',
     stylers: [
       {
-        color: '#f5f1e6',
+        color: '#2c2c2c',
+      },
+    ],
+  },
+  {
+    featureType: 'road',
+    elementType: 'labels.icon',
+    stylers: [
+      {
+        visibility: 'off',
+      },
+    ],
+  },
+  {
+    featureType: 'road',
+    elementType: 'labels.text.fill',
+    stylers: [
+      {
+        color: '#8a8a8a',
       },
     ],
   },
@@ -380,7 +426,7 @@ const RetroMode = [
     elementType: 'geometry',
     stylers: [
       {
-        color: '#fdfcf8',
+        color: '#373737',
       },
     ],
   },
@@ -389,16 +435,10 @@ const RetroMode = [
     elementType: 'geometry',
     stylers: [
       {
-        color: '#f8c967',
+        color: '#3c3c3c',
       },
-    ],
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry.stroke',
-    stylers: [
       {
-        color: '#e9bc62',
+        visibility: 'on',
       },
     ],
   },
@@ -407,16 +447,28 @@ const RetroMode = [
     elementType: 'geometry',
     stylers: [
       {
-        color: '#e98d58',
+        color: '#4e4e4e',
       },
     ],
   },
   {
-    featureType: 'road.highway.controlled_access',
+    featureType: 'road.local',
+    elementType: 'geometry.fill',
+    stylers: [
+      {
+        color: '#1a1a1a',
+      },
+      {
+        saturation: -35,
+      },
+    ],
+  },
+  {
+    featureType: 'road.local',
     elementType: 'geometry.stroke',
     stylers: [
       {
-        color: '#db8555',
+        visibility: 'off',
       },
     ],
   },
@@ -425,52 +477,33 @@ const RetroMode = [
     elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#806b63',
+        color: '#ffd700',
       },
     ],
   },
   {
-    featureType: 'transit.line',
-    elementType: 'geometry',
+    featureType: 'transit',
     stylers: [
       {
-        color: '#dfd2ae',
+        visibility: 'off',
       },
     ],
   },
   {
-    featureType: 'transit.line',
+    featureType: 'transit',
     elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#8f7d77',
-      },
-    ],
-  },
-  {
-    featureType: 'transit.line',
-    elementType: 'labels.text.stroke',
-    stylers: [
-      {
-        color: '#ebe3cd',
-      },
-    ],
-  },
-  {
-    featureType: 'transit.station',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#dfd2ae',
+        color: '#757575',
       },
     ],
   },
   {
     featureType: 'water',
-    elementType: 'geometry.fill',
+    elementType: 'geometry',
     stylers: [
       {
-        color: '#b9d3c2',
+        color: '#000000',
       },
     ],
   },
@@ -479,7 +512,7 @@ const RetroMode = [
     elementType: 'labels.text.fill',
     stylers: [
       {
-        color: '#92998d',
+        color: '#01a6f9',
       },
     ],
   },

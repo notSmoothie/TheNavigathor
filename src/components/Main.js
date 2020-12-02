@@ -1,0 +1,282 @@
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Pressable,
+} from "react-native";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+
+import ChooseiCal from "./ChooseiCal";
+import StyleSwitch from "./StyleSwitch";
+import { NavigaThorMode, RetroMode } from "../styles/MapStyles";
+const Main = (props) => {
+  const [map, setMap] = useState();
+  const [markers, setMarkers] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [latestMarkerId, setLatestMarkerId] = useState();
+  const [showFooter, setShowFooter] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [mapStyle, setMapStyle] = useState(RetroMode);
+  const [markerImage, setMarkerImage] = useState(require("../assets/location.png"))
+
+  async function getRooms(id) {
+    const response = await fetch("https://at.tuke.sk/api/room?text=".concat(markers[id].title))
+    const responseJson = await response.json()
+    if (response.ok || responseJson.ok) {
+      setRooms(responseJson)
+      setLatestMarkerId(id)
+    }
+  }
+
+  function getMarkers() {
+    return fetch("http://18.157.253.130:3000/markers")
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setMarkers(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function Footer() {
+    if (showFooter) {
+      if (latestMarkerId == undefined) {
+        return (
+          <View style={styles.footer}>
+          </View>
+        );
+      }
+      var id = latestMarkerId;
+      const name = markers[id].title;
+      const description = markers[id].description;
+
+      var filteredRooms = rooms;
+      filteredRooms = filteredRooms.filter((element) => {
+        if (element.name != null && element.name.length > 0) {
+          return element;
+        }
+      });
+
+      filteredRooms = filteredRooms.sort(function (a, b) {
+        var roomNameA = a.roomType.name.toUpperCase();
+        var roomNameB = b.roomType.name.toUpperCase();
+        if (roomNameA < roomNameB) {
+          return -1;
+        }
+        if (roomNameA > roomNameB) {
+          return 1;
+        }
+
+        return 0;
+      });
+
+      var roomsToRender = [];
+      for (let i = 0; i < filteredRooms.length; i++) {
+        if (
+          i == 0 ||
+          filteredRooms[i].roomType.idRoomType !=
+            filteredRooms[i - 1].roomType.idRoomType
+        ) {
+          roomsToRender.push(
+            <Text style={{ textAlign: "center", fontSize: 20, padding: 5 }}>
+              {filteredRooms[i].roomType.name}
+            </Text>
+          );
+        }
+        roomsToRender.push(
+          <Text style={{ textAlign: "center", padding: 5 }}>
+            {filteredRooms[i].name} - ({filteredRooms[i].number})
+          </Text>
+        );
+      }
+
+      return (
+        <View style={styles.footer}>
+          <Text style={{ textAlign: "center", padding: 5 }}>
+            {name} - {description}
+          </Text>
+          <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
+            {roomsToRender}
+          </ScrollView>
+        </View>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  const changeMapStyle = () => {
+    if (mapStyle == NavigaThorMode) {
+      setMapStyle(RetroMode);
+    } else if (mapStyle == RetroMode) {
+      setMapStyle(NavigaThorMode);
+    }
+  };
+
+  const Settings = (mapStyle) => {
+    if (showSettings) {
+      return (
+        <View style={styles.settingsContainer}>
+          <Pressable
+            style={styles.settingsBack}
+            onPress={() => {
+              setShowSettings(false);
+            }}
+          ></Pressable>
+          <View style={styles.settings}>
+            <View style={styles.settingsMenu}>
+              <StyleSwitch
+                style={styles.menuButton}
+                mapStyle={changeMapStyle}
+              ></StyleSwitch>
+              <ChooseiCal style={styles.menuButton}></ChooseiCal>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <Pressable
+          style={styles.settingsIcon}
+          onPress={() => {
+            setShowSettings(true);
+          }}
+        >
+          <Image source={require("../assets/settings.png")} />
+        </Pressable>
+      );
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <MapView
+        ref={(ref) => {
+          setMap(ref);
+        }}
+        provider={PROVIDER_GOOGLE}
+        style={styles.body}
+        onLayout={() => {
+          map.setCamera({
+            heading: -27.5,
+            center: {
+              latitude: 48.733033959741185,
+              longitude: 21.24518905793565,
+            },
+            zoom: 15.7,
+          });
+          getMarkers();
+        }}
+        toolbarEnabled={false}
+        rotateEnabled={false}
+        showsCompass={false}
+        onPress={() => {
+          setShowFooter(false);
+          map.animateCamera({
+            center: {
+              latitude: 48.733033959741185,
+              longitude: 21.24518905793565,
+            },
+            zoom: 15.7,
+          });
+        }}
+        onRegionChangeComplete={() => {
+          map.setCamera({
+            heading: -27.5,
+          });
+        }}
+        onMarkerPress={(marker) => {
+          setShowFooter(true);
+          getRooms(marker.nativeEvent.id - 1)
+          map.animateCamera({
+            zoom: 17,
+            center: {
+              latitude: marker.nativeEvent.coordinate.latitude,
+              longitude: marker.nativeEvent.coordinate.longitude,
+            },
+          });
+        }}
+        customMapStyle={mapStyle}
+      >
+        {markers.map((marker) => (
+          <Marker
+            key={marker.id}
+            identifier={String(marker.id)}
+            coordinate={{
+              latitude: parseFloat(marker.latlng.split(",")[0]),
+              longitude: parseFloat(marker.latlng.split(",")[1]),
+            }}
+            title={marker.title}
+            description={marker.description}
+            image={markerImage}
+          />
+        ))}
+      </MapView>
+      <Footer></Footer>
+      <Settings currentMapStyle={mapStyle}></Settings>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  body: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  footer: {
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    borderTopWidth: 2,
+    borderColor: "rgb(158,158,158)",
+    width: "100%",
+    height: "40%",
+    position: "absolute",
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  settingsContainer: {
+    flex: 1,
+    alignContent: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  settings: {
+    flex: 10,
+    backgroundColor: "rgba(255, 255, 255, 1)",
+  },
+  settingsBack: {
+    flex: 6,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  settingsMenu: {
+    flex: 1,
+  },
+  menuButton: {
+    padding: 10,
+    fontSize: 16,
+    textAlign: "center",
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    borderColor: "rgb(158, 158, 158)",
+  },
+  settingsIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  scrollFooter: {
+    flexDirection: "row",
+    alignContent: "center",
+    alignItems: "center",
+  },
+});
+
+export default Main;
