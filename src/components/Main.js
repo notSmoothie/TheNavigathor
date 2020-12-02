@@ -15,19 +15,24 @@ import StyleSwitch from './StyleSwitch';
 import {NavigaThorMode, RetroMode} from '../styles/MapStyles';
 
 const Main = (props) => {
+  const originalMarkers = props.markers
+  const originalRooms = props.rooms
+
   const [map, setMap] = useState();
-  const [rooms, setRooms] = useState([]);
+
   const [schedule, setSchedule] = useState([]);
-  const [markers, setMarkers] = useState([]);
+
+  const [rooms, setRooms] = useState(originalRooms);
+  const [buildingRooms, setBuildingRooms] = useState([]);
+
+  const [markers, setMarkers] = useState(originalMarkers);
   const [latestMarkerId, setLatestMarkerId] = useState();
 
   const [showFooter, setShowFooter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
   const [mapStyle, setMapStyle] = useState(RetroMode);
-  const [markerImage] = useState(
-    require('../assets/location.png'),
-  );
+  const [markerImage] = useState(require('../assets/location.png'));
 
   async function loadSchedule() {
     const schedulePath = FileSystem.documentDirectory.concat(
@@ -35,28 +40,31 @@ const Main = (props) => {
     );
     const fileInfo = await FileSystem.getInfoAsync(schedulePath);
     if (fileInfo.exists) {
-      const schedule = await FileSystem.readAsStringAsync(schedulePath)
-      setSchedule(schedule)
+      const schedule = await FileSystem.readAsStringAsync(schedulePath);
+      setSchedule(schedule);
     }
   }
 
-  async function getRooms(id) {
-    const response = await fetch(
-      'https://at.tuke.sk/api/room?text='.concat(markers[id].title),
-    );
-    const responseJson = await response.json();
-    if (response.ok || responseJson.ok) {
-      setRooms(responseJson);
-      setLatestMarkerId(id);
-    }
-  }
+  // function filterMarkersBySchedule() {
 
-  async function getMarkers() {
-    const response = await fetch('http://18.157.253.130:3000/markers');
-    const responseJson = await response.json();
-    if (response.ok || responseJson.ok) {
-      setMarkers(responseJson);
-    }
+  //   const filteredMarkers = markers.filter((element) => {
+  //     if (element.title == 0) {
+  //       return element;
+  //     }
+  //   });
+  // }
+
+  function getRoomsInBuilding(id) {
+    const roomsInBuilding = rooms.filter((element) => {
+      if (
+        element.building.name
+          .toUpperCase()
+          .includes(markers[id].title.toUpperCase())
+      ) {
+        return element;
+      }
+    });
+    setBuildingRooms(roomsInBuilding);
   }
 
   function Footer() {
@@ -68,8 +76,7 @@ const Main = (props) => {
       const name = markers[id].title;
       const description = markers[id].description;
 
-      var filteredRooms = rooms;
-      filteredRooms = filteredRooms.filter((element) => {
+      var filteredRooms = buildingRooms.filter((element) => {
         if (element.name != null && element.name.length > 0) {
           return element;
         }
@@ -96,13 +103,14 @@ const Main = (props) => {
             filteredRooms[i - 1].roomType.idRoomType
         ) {
           roomsToRender.push(
-            <Text style={{textAlign: 'center', fontSize: 20, padding: 5}}>
+            <Text key = {i} style={{textAlign: 'center', fontSize: 20, padding: 5}}>
               {filteredRooms[i].roomType.name}
             </Text>,
           );
         }
         roomsToRender.push(
-          <Text style={{textAlign: 'center', padding: 5}}>
+          // very ugly workaround to fix froggery
+          <Text key = {filteredRooms.length + i} style={{textAlign: 'center', padding: 5}}>
             {filteredRooms[i].name} - ({filteredRooms[i].number})
           </Text>,
         );
@@ -176,6 +184,7 @@ const Main = (props) => {
         provider={PROVIDER_GOOGLE}
         style={styles.body}
         onLayout={() => {
+          loadSchedule();
           map.setCamera({
             heading: -27.5,
             center: {
@@ -184,8 +193,6 @@ const Main = (props) => {
             },
             zoom: 15.7,
           });
-          getMarkers();
-          loadSchedule();
         }}
         toolbarEnabled={false}
         rotateEnabled={false}
@@ -206,6 +213,9 @@ const Main = (props) => {
         //   });
         // }}
         onMarkerPress={(marker) => {
+          getRoomsInBuilding(marker.nativeEvent.id - 1);
+          setLatestMarkerId(marker.nativeEvent.id - 1);
+          setShowFooter(true);
           map.animateCamera({
             zoom: 17,
             center: {
@@ -213,8 +223,6 @@ const Main = (props) => {
               longitude: marker.nativeEvent.coordinate.longitude,
             },
           });
-          setShowFooter(true);
-          getRooms(marker.nativeEvent.id - 1);
         }}
         customMapStyle={mapStyle}>
         {markers.map((marker) => (
