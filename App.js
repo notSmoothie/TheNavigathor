@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import MainScreen from './src/screens/MainScreen';
+import CPScreen from './src/screens/CPScreen';
 
 const RootStack = createStackNavigator();
 
@@ -13,6 +14,11 @@ const App = () => {
         <RootStack.Screen
           name="Home"
           component={MainScreen}
+          options={{headerShown: false}}
+        />
+        <RootStack.Screen
+          name="CP"
+          component={CPScreen}
           options={{headerShown: false}}
         />
       </RootStack.Navigator>

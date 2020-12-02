@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,49 +6,63 @@ import {
   ScrollView,
   Image,
   Pressable,
-} from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+  Button,
+} from 'react-native';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import * as FileSystem from 'expo-file-system';
+import ChooseiCal from './ChooseiCal';
+import StyleSwitch from './StyleSwitch';
+import {NavigaThorMode, RetroMode} from '../styles/MapStyles';
 
-import ChooseiCal from "./ChooseiCal";
-import StyleSwitch from "./StyleSwitch";
-import { NavigaThorMode, RetroMode } from "../styles/MapStyles";
 const Main = (props) => {
   const [map, setMap] = useState();
-  const [markers, setMarkers] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [schedule, setSchedule] = useState([]);
+  const [markers, setMarkers] = useState([]);
   const [latestMarkerId, setLatestMarkerId] = useState();
+
   const [showFooter, setShowFooter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [mapStyle, setMapStyle] = useState(RetroMode);
-  const [markerImage, setMarkerImage] = useState(require("../assets/location.png"))
 
-  async function getRooms(id) {
-    const response = await fetch("https://at.tuke.sk/api/room?text=".concat(markers[id].title))
-    const responseJson = await response.json()
-    if (response.ok || responseJson.ok) {
-      setRooms(responseJson)
-      setLatestMarkerId(id)
+  const [mapStyle, setMapStyle] = useState(RetroMode);
+  const [markerImage] = useState(
+    require('../assets/location.png'),
+  );
+
+  async function loadSchedule() {
+    const schedulePath = FileSystem.documentDirectory.concat(
+      'jsonizedIcs.json',
+    );
+    const fileInfo = await FileSystem.getInfoAsync(schedulePath);
+    if (fileInfo.exists) {
+      const schedule = await FileSystem.readAsStringAsync(schedulePath)
+      setSchedule(schedule)
     }
   }
 
-  function getMarkers() {
-    return fetch("http://18.157.253.130:3000/markers")
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setMarkers(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  async function getRooms(id) {
+    const response = await fetch(
+      'https://at.tuke.sk/api/room?text='.concat(markers[id].title),
+    );
+    const responseJson = await response.json();
+    if (response.ok || responseJson.ok) {
+      setRooms(responseJson);
+      setLatestMarkerId(id);
+    }
+  }
+
+  async function getMarkers() {
+    const response = await fetch('http://18.157.253.130:3000/markers');
+    const responseJson = await response.json();
+    if (response.ok || responseJson.ok) {
+      setMarkers(responseJson);
+    }
   }
 
   function Footer() {
     if (showFooter) {
       if (latestMarkerId == undefined) {
-        return (
-          <View style={styles.footer}>
-          </View>
-        );
+        return <View style={styles.footer}></View>;
       }
       var id = latestMarkerId;
       const name = markers[id].title;
@@ -82,21 +96,21 @@ const Main = (props) => {
             filteredRooms[i - 1].roomType.idRoomType
         ) {
           roomsToRender.push(
-            <Text style={{ textAlign: "center", fontSize: 20, padding: 5 }}>
+            <Text style={{textAlign: 'center', fontSize: 20, padding: 5}}>
               {filteredRooms[i].roomType.name}
-            </Text>
+            </Text>,
           );
         }
         roomsToRender.push(
-          <Text style={{ textAlign: "center", padding: 5 }}>
+          <Text style={{textAlign: 'center', padding: 5}}>
             {filteredRooms[i].name} - ({filteredRooms[i].number})
-          </Text>
+          </Text>,
         );
       }
 
       return (
         <View style={styles.footer}>
-          <Text style={{ textAlign: "center", padding: 5 }}>
+          <Text style={{textAlign: 'center', padding: 5}}>
             {name} - {description}
           </Text>
           <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
@@ -125,15 +139,17 @@ const Main = (props) => {
             style={styles.settingsBack}
             onPress={() => {
               setShowSettings(false);
-            }}
-          ></Pressable>
+            }}></Pressable>
           <View style={styles.settings}>
             <View style={styles.settingsMenu}>
               <StyleSwitch
                 style={styles.menuButton}
-                mapStyle={changeMapStyle}
-              ></StyleSwitch>
+                mapStyle={changeMapStyle}></StyleSwitch>
               <ChooseiCal style={styles.menuButton}></ChooseiCal>
+              <Button
+                title="Find CP!"
+                onPress={() => props.navigation.navigate('CP')}
+              />
             </View>
           </View>
         </View>
@@ -144,9 +160,8 @@ const Main = (props) => {
           style={styles.settingsIcon}
           onPress={() => {
             setShowSettings(true);
-          }}
-        >
-          <Image source={require("../assets/settings.png")} />
+          }}>
+          <Image source={require('../assets/settings.png')} />
         </Pressable>
       );
     }
@@ -170,6 +185,7 @@ const Main = (props) => {
             zoom: 15.7,
           });
           getMarkers();
+          loadSchedule();
         }}
         toolbarEnabled={false}
         rotateEnabled={false}
@@ -184,14 +200,12 @@ const Main = (props) => {
             zoom: 15.7,
           });
         }}
-        onRegionChangeComplete={() => {
-          map.setCamera({
-            heading: -27.5,
-          });
-        }}
+        // onRegionChangeComplete={() => {
+        //   map.setCamera({
+        //     heading: -27.5,
+        //   });
+        // }}
         onMarkerPress={(marker) => {
-          setShowFooter(true);
-          getRooms(marker.nativeEvent.id - 1)
           map.animateCamera({
             zoom: 17,
             center: {
@@ -199,16 +213,17 @@ const Main = (props) => {
               longitude: marker.nativeEvent.coordinate.longitude,
             },
           });
+          setShowFooter(true);
+          getRooms(marker.nativeEvent.id - 1);
         }}
-        customMapStyle={mapStyle}
-      >
+        customMapStyle={mapStyle}>
         {markers.map((marker) => (
           <Marker
             key={marker.id}
             identifier={String(marker.id)}
             coordinate={{
-              latitude: parseFloat(marker.latlng.split(",")[0]),
-              longitude: parseFloat(marker.latlng.split(",")[1]),
+              latitude: parseFloat(marker.latlng.split(',')[0]),
+              longitude: parseFloat(marker.latlng.split(',')[1]),
             }}
             title={marker.title}
             description={marker.description}
@@ -225,36 +240,36 @@ const Main = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   body: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   footer: {
-    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderTopWidth: 2,
-    borderColor: "rgb(158,158,158)",
-    width: "100%",
-    height: "40%",
-    position: "absolute",
-    alignContent: "center",
-    justifyContent: "center",
+    borderColor: 'rgb(158,158,158)',
+    width: '100%',
+    height: '40%',
+    position: 'absolute',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   settingsContainer: {
     flex: 1,
-    alignContent: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+    alignContent: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
   },
   settings: {
     flex: 10,
-    backgroundColor: "rgba(255, 255, 255, 1)",
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
   settingsBack: {
     flex: 6,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   settingsMenu: {
     flex: 1,
@@ -262,20 +277,20 @@ const styles = StyleSheet.create({
   menuButton: {
     padding: 10,
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     borderRadius: 30,
     borderBottomWidth: 1,
-    borderColor: "rgb(158, 158, 158)",
+    borderColor: 'rgb(158, 158, 158)',
   },
   settingsIcon: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     right: 10,
   },
   scrollFooter: {
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
 
