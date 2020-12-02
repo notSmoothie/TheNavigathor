@@ -212,9 +212,6 @@ const Main = (props) => {
         //   });
         // }}
         onMarkerPress={(marker) => {
-          schedule.map(e => {
-            console.log(e.location)
-          })
           getRoomsInBuilding(marker.nativeEvent.id - 1);
           setLatestMarkerId(marker.nativeEvent.id - 1);
           setShowFooter(true);
