@@ -10,7 +10,7 @@ import {LogBox} from 'react-native';
 const RootStack = createStackNavigator();
 
 const App = () => {
-  LogBox.ignoreAllLogs;
+  LogBox.ignoreAllLogs();
   return (
     <NavigationContainer>
       <RootStack.Navigator>

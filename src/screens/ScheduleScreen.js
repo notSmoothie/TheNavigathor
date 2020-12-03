@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, StyleSheet, Button} from 'react-native';
 import Schedule from '../components/Schedule';
 const styles = StyleSheet.create({
   container: {
@@ -10,12 +10,7 @@ const styles = StyleSheet.create({
 });
 
 const ScheduleScreen = ({navigation, route}) => {
-  return (
-    <View style={styles.container}>
-      <Schedule schedule={route.params}></Schedule>
-      <Button title="Home" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
+  return <Schedule schedule={route.params.schedule}></Schedule>;
 };
 
 export default ScheduleScreen;

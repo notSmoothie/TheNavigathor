@@ -8,22 +8,6 @@ const LightMode = [
     ]
   },
   {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
     "featureType": "administrative",
     "elementType": "geometry",
     "stylers": [
@@ -46,7 +30,7 @@ const LightMode = [
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#cecaca"
+        "color": "#ffffff"
       }
     ]
   },
@@ -58,7 +42,10 @@ const LightMode = [
         "color": "#ffd700"
       },
       {
-        "weight": 4
+        "lightness": 20
+      },
+      {
+        "weight": 2
       }
     ]
   },
@@ -76,6 +63,9 @@ const LightMode = [
     "stylers": [
       {
         "color": "#eeeeee"
+      },
+      {
+        "visibility": "off"
       }
     ]
   },
@@ -102,7 +92,7 @@ const LightMode = [
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#f2f2f2"
+        "color": "#d9d9d9"
       },
       {
         "visibility": "on"
@@ -129,6 +119,15 @@ const LightMode = [
   },
   {
     "featureType": "road",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#919191"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
     "elementType": "labels.icon",
     "stylers": [
       {
@@ -137,11 +136,29 @@ const LightMode = [
     ]
   },
   {
-    "featureType": "road.arterial",
+    "featureType": "road",
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#757575"
+        "color": "#ffd700"
+      },
+      {
+        "saturation": -65
+      },
+      {
+        "lightness": 100
+      },
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#000000"
       }
     ]
   },
@@ -151,24 +168,6 @@ const LightMode = [
     "stylers": [
       {
         "color": "#dadada"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
       }
     ]
   },

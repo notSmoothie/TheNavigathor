@@ -6,7 +6,6 @@ import {
   ScrollView,
   Image,
   Pressable,
-  Button,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import * as FileSystem from 'expo-file-system';
@@ -48,8 +47,11 @@ const Main = (props) => {
   const [showFooter, setShowFooter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const [mapStyle, setMapStyle] = useState(LightMode);
+  const [mapStyle, setMapStyle] = useState(DarkMode);
   const [markerImage] = useState(require('../assets/location.png'));
+
+  const IC_ARR_DOWN = require('../assets/chevron/jozef.png');
+  const IC_ARR_UP = require('../assets/chevron/stefan.png');
 
   const [showRoute, setShowRoute] = useState(false);
   const [myLocation, setMyLocation] = useState({
@@ -109,7 +111,7 @@ const Main = (props) => {
   function RenderItems(props) {
     return props.items.map((a) => {
       return (
-        <Text key={uuidv4()} style={{padding: 0}}>
+        <Text key={uuidv4()} style={{padding: 0, color: "rgb(255,215,0)"}}>
           {a}
         </Text>
       );
@@ -117,7 +119,7 @@ const Main = (props) => {
   }
 
   function Footer() {
-    if (showFooter) {
+    if (showFooter && !showSettings) {
       if (latestMarkerId == undefined) {
         return <View style={styles.footer}></View>;
       }
@@ -130,7 +132,8 @@ const Main = (props) => {
           <View style={styles.footer}>
             <CanteenView
               canteenType={markers[id].fetch_attribute.split(',')[0]}
-              order={markers[id].fetch_attribute.split(',')[1]}></CanteenView>
+              order={markers[id].fetch_attribute.split(',')[1]}
+              lightMode={mapStyle == LightMode}></CanteenView>
           </View>
         );
       } else {
@@ -177,17 +180,16 @@ const Main = (props) => {
             filteredRooms[i].name +
             ' - (' +
             filteredRooms[i].number +
-            ')' +
-            '\n';
+            ')';
         }
 
-        state = {
+        const state = {
           contents: items,
         };
 
         return (
           <View style={styles.footer}>
-            <Text style={{textAlign: 'center', padding: 5}}>
+            <Text style={{textAlign: 'center', padding: 5, color: "rgb(255,215,0)", fontWeight:"bold"}}>
               {name} - {description}
             </Text>
             <ScrollView style={{alignSelf: 'stretch'}}>
@@ -196,15 +198,25 @@ const Main = (props) => {
                     return (
                       <DropDownItem
                         key={i}
+                        style={styles.dropDownItem}
                         contentVisible={false}
+                        invisibleImage={IC_ARR_DOWN}
+                        visibleImage={IC_ARR_UP}
                         header={
                           <View>
-                            <Text style={{fontSize: 20, padding: 5}}>
+                            <Text
+                              style={{
+                                fontSize: 20,
+                                padding: 5,
+                                color: 'rgb(255,215,0)',
+                                fontWeight: 'bold',
+                              }}>
                               {param.title}
                             </Text>
                           </View>
                         }>
-                        <RenderItems items={param.body.split(';')}></RenderItems>
+                        <RenderItems
+                          items={param.body.split(';')}></RenderItems>
                       </DropDownItem>
                     );
                   })
@@ -298,7 +310,7 @@ const Main = (props) => {
                 onPress={() => {
                   props.navigation.navigate('CP');
                 }}>
-                <Text style={styles.menuButton}>Find CP!</Text>
+                <Text style={styles.menuButton}>Find CP</Text>
               </Pressable>
             </View>
           </View>
@@ -339,6 +351,7 @@ const Main = (props) => {
         loadingEnabled={true}
         rotateEnabled={false}
         showsCompass={false}
+        showsUserLocation={false}
         onPress={() => {
           setShowFooter(false);
           map.animateCamera({
@@ -397,6 +410,7 @@ const Main = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'flex-end',
   },
   body: {
@@ -405,14 +419,16 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   footer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderTopWidth: 2,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
     borderColor: 'rgb(158,158,158)',
-    width: '100%',
+    width: '99%',
     height: '40%',
     position: 'absolute',
     alignContent: 'center',
     justifyContent: 'center',
+    padding: 8,
   },
   settingsContainer: {
     flex: 1,

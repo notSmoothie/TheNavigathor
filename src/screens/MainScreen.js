@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Main from '../components/Main';
-import * as FileSystem from 'expo-file-system';
 
 const MainScreen = ({navigation}) => {
   async function getRooms() {
