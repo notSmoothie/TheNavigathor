@@ -4,10 +4,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import MainScreen from './src/screens/MainScreen';
 import CPScreen from './src/screens/CPScreen';
+import { LogBox } from 'react-native';
 
 const RootStack = createStackNavigator();
 
 const App = () => {
+  LogBox.ignoreAllLogs
   return (
     <NavigationContainer>
       <RootStack.Navigator>
