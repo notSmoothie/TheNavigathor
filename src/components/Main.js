@@ -14,8 +14,9 @@ import * as FileSystem from 'expo-file-system';
 import ChooseiCal from './ChooseiCal';
 import StyleSwitch from './StyleSwitch';
 import FilterSwitch from './FilterSwitch';
+import Schedule from './Schedule';
 
-import {NavigaThorMode, RetroMode} from '../styles/MapStyles';
+import {LightMode, DarkMode} from '../styles/MapStyles';
 import CanteenView from './CanteenView';
 
 import MapViewDirections from 'react-native-maps-directions';
@@ -23,7 +24,9 @@ import NavigateMe from './NavigateMe';
 import {or} from 'react-native-reanimated';
 
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+
+import DropDownItem from 'react-native-drop-down-item';
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC_kX1KDkC4pyRUR8ZPXAYre9-Nu1vn60Y';
 
@@ -45,7 +48,7 @@ const Main = (props) => {
   const [showFooter, setShowFooter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const [mapStyle, setMapStyle] = useState(NavigaThorMode);
+  const [mapStyle, setMapStyle] = useState(LightMode);
   const [markerImage] = useState(require('../assets/location.png'));
 
   const [showRoute, setShowRoute] = useState(false);
@@ -103,6 +106,16 @@ const Main = (props) => {
     setBuildingRooms(roomsInBuilding);
   }
 
+  function RenderItems(props) {
+    return props.items.map((a) => {
+      return (
+        <Text key={uuidv4()} style={{padding: 0}}>
+          {a}
+        </Text>
+      );
+    });
+  }
+
   function Footer() {
     if (showFooter) {
       if (latestMarkerId == undefined) {
@@ -120,8 +133,7 @@ const Main = (props) => {
               order={markers[id].fetch_attribute.split(',')[1]}></CanteenView>
           </View>
         );
-      }
-      else {
+      } else {
         var filteredRooms = buildingRooms.filter((element) => {
           if (element.name != null && element.name.length > 0) {
             return element;
@@ -141,44 +153,67 @@ const Main = (props) => {
           return 0;
         });
 
-        var roomsToRender = [];
+        var items = [];
+        var item = {
+          title: '',
+          body: '',
+        };
         for (let i = 0; i < filteredRooms.length; i++) {
           if (
             i == 0 ||
             filteredRooms[i].roomType.idRoomType !=
               filteredRooms[i - 1].roomType.idRoomType
           ) {
-            roomsToRender.push(
-              <Text
-                key={uuidv4()}
-                style={{textAlign: 'center', fontSize: 20, padding: 5}}>
-                {filteredRooms[i].roomType.name}
-              </Text>,
-            );
+            if (i > 0) {
+              items.push({title: item.title, body: item.body});
+              item.title = '';
+              item.body = '';
+            }
+            item.title = filteredRooms[i].roomType.name;
           }
-          roomsToRender.push(
-            <Text
-              key={uuidv4()}
-              style={{textAlign: 'center', padding: 5}}>
-              {filteredRooms[i].name} - ({filteredRooms[i].number})
-            </Text>,
-          );
+          item.body =
+            item.body +
+            (item.body == '' ? '' : ';') +
+            filteredRooms[i].name +
+            ' - (' +
+            filteredRooms[i].number +
+            ')' +
+            '\n';
         }
-      }
 
-      return (
-        <View style={styles.footer}>
-          {/* <NavigateMe
-            latlng={markers[id].latlng}
-            callBack={navigateMeToMarker}></NavigateMe> */}
-          <Text style={{textAlign: 'center', padding: 5}}>
-            {name} - {description}
-          </Text>
-          <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
-            {roomsToRender}
-          </ScrollView>
-        </View>
-      );
+        state = {
+          contents: items,
+        };
+
+        return (
+          <View style={styles.footer}>
+            <Text style={{textAlign: 'center', padding: 5}}>
+              {name} - {description}
+            </Text>
+            <ScrollView style={{alignSelf: 'stretch'}}>
+              {state.contents
+                ? state.contents.map((param, i) => {
+                    return (
+                      <DropDownItem
+                        key={i}
+                        contentVisible={false}
+                        header={
+                          <View>
+                            <Text style={{fontSize: 20, padding: 5}}>
+                              {param.title}
+                            </Text>
+                          </View>
+                        }>
+                        <RenderItems items={param.body.split(';')}></RenderItems>
+                      </DropDownItem>
+                    );
+                  })
+                : null}
+              <View />
+            </ScrollView>
+          </View>
+        );
+      }
     } else {
       return null;
     }
@@ -216,20 +251,20 @@ const Main = (props) => {
 */
 
   const switchFiltering = () => {
-    if (filterMode == false) {
+    if (!filterMode) {
       filterSchedule();
       setFilterMode(true);
-    } else if (filterMode == true) {
+    } else {
       setMarkers(originalMarkers);
       setFilterMode(false);
     }
   };
 
   const changeMapStyle = () => {
-    if (mapStyle == NavigaThorMode) {
-      setMapStyle(RetroMode);
-    } else if (mapStyle == RetroMode) {
-      setMapStyle(NavigaThorMode);
+    if (mapStyle == LightMode) {
+      setMapStyle(DarkMode);
+    } else if (mapStyle == DarkMode) {
+      setMapStyle(LightMode);
     }
   };
 
@@ -251,10 +286,20 @@ const Main = (props) => {
                 style={styles.menuButton}
                 filterMode={switchFiltering}></FilterSwitch>
               <ChooseiCal style={styles.menuButton}></ChooseiCal>
-              {/* <Button
-                title="Find CP!"
-                onPress={() => props.navigation.navigate('CP')}
-              /> */}
+              <Pressable
+                onPress={() => {
+                  props.navigation.navigate('Schedule', {
+                    schedule: schedule,
+                  });
+                }}>
+                <Text style={styles.menuButton}>Show Schedule</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  props.navigation.navigate('CP');
+                }}>
+                <Text style={styles.menuButton}>Find CP!</Text>
+              </Pressable>
             </View>
           </View>
         </View>

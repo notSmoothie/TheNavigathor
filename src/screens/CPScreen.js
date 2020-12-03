@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import CPSearch from '../components/CPSearch';
+// import Geolocation from 'react-native-geolocation-service';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -10,12 +12,8 @@ const styles = StyleSheet.create({
 });
 
 const CPScreen = ({navigation}) => {
-  return (
-    <View style={styles.container}>
-      <CPSearch></CPSearch>
-      <Button title="Home" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
+  // navigator.geolocation = require(GEOLOCATION_PACKAGE);
+  return <CPSearch navigation={navigation}></CPSearch>;
 };
 
 export default CPScreen;
