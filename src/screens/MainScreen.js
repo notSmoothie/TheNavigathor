@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import Main from '../components/Main';
+import AnimatedSplash from 'react-native-animated-splash-screen';
 
 const MainScreen = ({navigation}) => {
   async function getRooms() {
@@ -92,22 +93,21 @@ const MainScreen = ({navigation}) => {
       );
     } else {
       return (
-        <View>
-          <Text>
-            {Markers.error
-              ? 'Failed to load resource Markers'
-              : Markers.loading
-              ? 'Loading Markers...'
-              : 'Markers loaded.'}
-          </Text>
-          <Text>
-            {Rooms.error
-              ? 'Failed to load resource Rooms'
-              : Rooms.loading
-              ? 'Loading Rooms...'
-              : 'Loaded Rooms.'}
-          </Text>
-        </View>
+        <AnimatedSplash
+          translucent={true}
+          isLoaded={() => {
+            if (Markers.loading != null && Rooms.loading != null) {
+              if (Markers.loading == false && Rooms.loading == false) {
+                return true;
+              }
+              return false;
+            }
+            return false;
+          }}
+          logoImage={require('../assets/logo.png')}
+          backgroundColor={'#000000'}
+          logoHeight={250}
+          logoWidth={250}></AnimatedSplash>
       );
     }
   }

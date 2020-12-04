@@ -16,6 +16,7 @@
     "ics-to-json": "^1.0.0",
     "react": "17.0.1",
     "react-native": "0.63.4",
+    "react-native-animated-splash-screen": "^2.0.5",
     "react-native-document-picker": "^4.1.0",
     "react-native-drop-down-item": "^1.1.0",
     "react-native-expandable-listview": "^1.3.0",

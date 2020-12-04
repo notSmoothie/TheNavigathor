@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import 'react-native-get-random-values';
-import { color } from 'react-native-reanimated';
+import {color} from 'react-native-reanimated';
 import {v4 as uuidv4} from 'uuid';
 
 const Schedule = (props) => {
@@ -24,100 +24,329 @@ const Schedule = (props) => {
 
   schedule.map((e) => {
     if (e.day == 1) {
-      var add;
-      if (e.summary.split('(')[1].toUpperCase().includes("Cvičenie".toUpperCase())) {
-        add = e.summary.split('(')[1].toUpperCase()
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Prednáška".toUpperCase())) {
-        add = e.summary.split('(')[1].toUpperCase()
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Seminár".toUpperCase())) {
-        add = e.summary.split('(')[1].toUpperCase()
+      var type;
+      if (
+        e.summary.split('(')[1].toUpperCase().includes('Cvičenie'.toUpperCase())
+      ) {
+        type = 'Cvičenie';
+      } else if (
+        e.summary
+          .split('(')[1]
+          .toUpperCase()
+          .includes('Prednáška'.toUpperCase())
+      ) {
+        type = 'Prednáška';
+      } else if (
+        e.summary.split('(')[1].toUpperCase().includes('Seminár'.toUpperCase())
+      ) {
+        type = 'Seminár';
       }
 
-      const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
-      const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
-      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("]")
-      var roomAndBuilding = e.location.split('(')
-      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
-      const subject = e.summary.split('(')[0]
+      const startDate = e.startDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.startDate.split('T')[1].slice(2, 4));
+      const endDate = e.endDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.endDate.split('T')[1].slice(2, 4));
+      const date = '['
+        .concat(startDate)
+        .concat(' - ')
+        .concat(endDate)
+        .concat(']');
+      var roomAndBuilding = e.location.split('(');
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(
+        0,
+        roomAndBuilding[roomAndBuilding.length - 1].length - 1,
+      );
+      const subject = e.summary.split('(')[0];
 
-      mon.push(<Text key={uuidv4()} style={styles.subject}>{}</Text>);
+      mon.push(
+        <View style={styles.predmet}>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            {subject}
+          </Text>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            ({type})
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Od: {startDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Do: {endDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Učebňa: {roomAndBuilding}
+          </Text>
+        </View>
+      );
     }
     if (e.day == 2) {
-      var add;
-      if (e.summary.split('(')[1].toUpperCase().includes("Cvičenie".toUpperCase())) {
-        add = " - CV"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Prednáška".toUpperCase())) {
-        add = " - P"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Seminár".toUpperCase())) {
-        add = " - S"
+      var type;
+      if (
+        e.summary.split('(')[1].toUpperCase().includes('Cvičenie'.toUpperCase())
+      ) {
+        type = 'Cvičenie';
+      } else if (
+        e.summary
+          .split('(')[1]
+          .toUpperCase()
+          .includes('Prednáška'.toUpperCase())
+      ) {
+        type = 'Prednáška';
+      } else if (
+        e.summary.split('(')[1].toUpperCase().includes('Seminár'.toUpperCase())
+      ) {
+        type = 'Seminár';
       }
 
-      const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
-      const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
-      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
-      var roomAndBuilding = e.location.split('(')
-      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+      const startDate = e.startDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.startDate.split('T')[1].slice(2, 4));
+      const endDate = e.endDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.endDate.split('T')[1].slice(2, 4));
+      const date = '['
+        .concat(startDate)
+        .concat(' - ')
+        .concat(endDate)
+        .concat(']');
+      var roomAndBuilding = e.location.split('(');
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(
+        0,
+        roomAndBuilding[roomAndBuilding.length - 1].length - 1,
+      );
+      const subject = e.summary.split('(')[0];
 
-      tue.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
+      tue.push(
+        <View style={styles.predmet}>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            {subject}
+          </Text>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            ({type})
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Od: {startDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Do: {endDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Učebňa: {roomAndBuilding}
+          </Text>
+        </View>
+      );
     }
     if (e.day == 3) {
-      var add;
-      if (e.summary.split('(')[1].toUpperCase().includes("Cvičenie".toUpperCase())) {
-        add = " - CV"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Prednáška".toUpperCase())) {
-        add = " - P"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Seminár".toUpperCase())) {
-        add = " - S"
+      var type;
+      if (
+        e.summary.split('(')[1].toUpperCase().includes('Cvičenie'.toUpperCase())
+      ) {
+        type = 'Cvičenie';
+      } else if (
+        e.summary
+          .split('(')[1]
+          .toUpperCase()
+          .includes('Prednáška'.toUpperCase())
+      ) {
+        type = 'Prednáška';
+      } else if (
+        e.summary.split('(')[1].toUpperCase().includes('Seminár'.toUpperCase())
+      ) {
+        type = 'Seminár';
       }
-      
-      const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
-      const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
-      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
 
-      var roomAndBuilding = e.location.split('(')
-      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+      const startDate = e.startDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.startDate.split('T')[1].slice(2, 4));
+      const endDate = e.endDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.endDate.split('T')[1].slice(2, 4));
+      const date = '['
+        .concat(startDate)
+        .concat(' - ')
+        .concat(endDate)
+        .concat(']');
+      var roomAndBuilding = e.location.split('(');
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(
+        0,
+        roomAndBuilding[roomAndBuilding.length - 1].length - 1,
+      );
+      const subject = e.summary.split('(')[0];
 
-      wed.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
+      wed.push(
+        <View style={styles.predmet}>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            {subject}
+          </Text>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            ({type})
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Od: {startDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Do: {endDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Učebňa: {roomAndBuilding}
+          </Text>
+        </View>
+      );
     }
     if (e.day == 4) {
-      var add;
-      if (e.summary.split('(')[1].toUpperCase().includes("Cvičenie".toUpperCase())) {
-        add = " - CV"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Prednáška".toUpperCase())) {
-        add = " - P"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Seminár".toUpperCase())) {
-        add = " - S"
+      var type;
+      if (
+        e.summary.split('(')[1].toUpperCase().includes('Cvičenie'.toUpperCase())
+      ) {
+        type = 'Cvičenie';
+      } else if (
+        e.summary
+          .split('(')[1]
+          .toUpperCase()
+          .includes('Prednáška'.toUpperCase())
+      ) {
+        type = 'Prednáška';
+      } else if (
+        e.summary.split('(')[1].toUpperCase().includes('Seminár'.toUpperCase())
+      ) {
+        type = 'Seminár';
       }
-      
-      const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
-      const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
-      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
 
-      var roomAndBuilding = e.location.split('(')
-      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+      const startDate = e.startDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.startDate.split('T')[1].slice(2, 4));
+      const endDate = e.endDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.endDate.split('T')[1].slice(2, 4));
+      const date = '['
+        .concat(startDate)
+        .concat(' - ')
+        .concat(endDate)
+        .concat(']');
+      var roomAndBuilding = e.location.split('(');
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(
+        0,
+        roomAndBuilding[roomAndBuilding.length - 1].length - 1,
+      );
+      const subject = e.summary.split('(')[0];
 
-      thu.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
+      thu.push(
+        <View style={styles.predmet}>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            {subject}
+          </Text>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            ({type})
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Od: {startDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Do: {endDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Učebňa: {roomAndBuilding}
+          </Text>
+        </View>
+      );
     }
     if (e.day == 5) {
-      var add;  function checkAdd() {
-    
+      var type;
+      if (
+        e.summary.split('(')[1].toUpperCase().includes('Cvičenie'.toUpperCase())
+      ) {
+        type = 'Cvičenie';
+      } else if (
+        e.summary
+          .split('(')[1]
+          .toUpperCase()
+          .includes('Prednáška'.toUpperCase())
+      ) {
+        type = 'Prednáška';
+      } else if (
+        e.summary.split('(')[1].toUpperCase().includes('Seminár'.toUpperCase())
+      ) {
+        type = 'Seminár';
       }
-      if (e.summary.split('(')[1].toUpperCase().includes("Cvičenie".toUpperCase())) {
-        add = " - CV"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Prednáška".toUpperCase())) {
-        add = " - P"
-      } else if (e.summary.split('(')[1].toUpperCase().includes("Seminár".toUpperCase())) {
-        add = " - S"
-      }
-      
-      const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
-      const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
-      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
 
-      var roomAndBuilding = e.location.split('(')
-      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+      const startDate = e.startDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.startDate.split('T')[1].slice(2, 4));
+      const endDate = e.endDate
+        .split('T')[1]
+        .slice(0, 2)
+        .concat(':')
+        .concat(e.endDate.split('T')[1].slice(2, 4));
+      const date = '['
+        .concat(startDate)
+        .concat(' - ')
+        .concat(endDate)
+        .concat(']');
+      var roomAndBuilding = e.location.split('(');
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(
+        0,
+        roomAndBuilding[roomAndBuilding.length - 1].length - 1,
+      );
+      const subject = e.summary.split('(')[0];
 
-      fri.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
+      fri.push(
+        <View style={styles.predmet}>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            {subject}
+          </Text>
+          <Text
+            key={uuidv4()}
+            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+            ({type})
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Od: {startDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Do: {endDate}
+          </Text>
+          <Text key={uuidv4()} style={styles.subject}>
+            Učebňa: {roomAndBuilding}
+          </Text>
+        </View>,
+      );
     }
   });
 
@@ -126,8 +355,12 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={styles.day}>Monday</Text>
-          {mon}
+          <View style={styles.day}>
+            <Text key={uuidv4()} style={styles.dayText}>
+              Monday
+            </Text>
+          </View>
+          <View style={{padding: '2%'}}>{mon}</View>
         </View>
       </View>,
     );
@@ -137,8 +370,12 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={styles.day}>Tuesday</Text>
-          {tue}
+          <View style={styles.day}>
+            <Text key={uuidv4()} style={styles.dayText}>
+              Tuesday
+            </Text>
+          </View>
+          <View style={{padding: '2%'}}>{tue}</View>
         </View>
       </View>,
     );
@@ -148,8 +385,12 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={styles.day}>Wednesday</Text>
-          {wed}
+          <View style={styles.day}>
+            <Text key={uuidv4()} style={styles.dayText}>
+              Wednesday
+            </Text>
+          </View>
+          <View style={{padding: '2%'}}>{wed}</View>
         </View>
       </View>,
     );
@@ -159,8 +400,12 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={styles.day}>Thursday</Text>
-          {thu}
+          <View style={styles.day}>
+            <Text key={uuidv4()} style={styles.dayText}>
+              Thursday
+            </Text>
+          </View>
+          <View style={{padding: '2%'}}>{thu}</View>
         </View>
       </View>,
     );
@@ -170,21 +415,25 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={styles.day}>Friday</Text>
-          {fri}
+          <View style={styles.day}>
+            <Text key={uuidv4()} style={styles.dayText}>
+              Friday
+            </Text>
+          </View>
+          <View style={{padding: '2%'}}>{fri}</View>
         </View>
       </View>,
     );
   }
 
-  return <ScrollView justifyContent="center" style={styles.container}>{scheduleToRender}</ScrollView>;
+  return <ScrollView style={styles.container}>{scheduleToRender}</ScrollView>;
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf:"stretch",
-    backgroundColor:"black",
+    alignSelf: 'stretch',
+    backgroundColor: 'black',
     alignContent: 'center',
   },
   row: {
@@ -193,13 +442,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
-  subject:{
-    color:"rgb(255,215,0)"
+  subject: {
+    color: 'rgb(255,215,0)',
   },
-  day:{
-    fontSize: 20,
-    color:"rgb(255,215,0)",
-    fontWeight:"bold"
+  predmet: {
+    padding: '3%',
+  },
+  day: {
+    backgroundColor: 'rgb(255,215,0)',
+    padding: '2%',
+  },
+  dayText: {
+    fontSize: 30,
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   col: {
     flex: 1,
