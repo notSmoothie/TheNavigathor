@@ -1,8 +1,12 @@
 import React from 'react';
-import {Button} from 'react-native';
+import {Pressable, Image} from 'react-native';
 
 const NavigateMe = (props) => {
-  return <Button title="Navigate me here!" onPress={props.callBack}></Button>;
+  return (
+    <Pressable onPress={props.callBack} style={props.style}>
+      <Image source={require('../assets/navigateicon.png')}></Image>
+    </Pressable>
+  );
 };
 
 export default NavigateMe;

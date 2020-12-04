@@ -140,6 +140,7 @@ const Main = (props) => {
       if (markers[id].fetch_attribute != null) {
         return (
           <View style={styles.footer}>
+            <NavigateMe></NavigateMe>
             <CanteenView
               canteenType={markers[id].fetch_attribute.split(',')[0]}
               order={markers[id].fetch_attribute.split(',')[1]}
@@ -215,6 +216,12 @@ const Main = (props) => {
             <Image
               style={{position: 'absolute', top: '-10.5%', alignSelf: 'center'}}
               source={IC_SPECIAL_BUTTON}></Image>
+            <NavigateMe
+              style={{
+                position: 'absolute',
+                top: '-10.5%',
+                right: '5%',
+              }}></NavigateMe>
             <Text
               style={{
                 textAlign: 'center',
@@ -286,19 +293,18 @@ const Main = (props) => {
   }
   /*
   <MapViewDirections
-  origin={myCurrentDestination}
-  destination={myDestination}
-  apikey={GOOGLE_MAPS_APIKEY}
-  strokeWidth={3}
-  mode={'WALKING'}
-  strokeColor="hotpink"
-/>
+    origin={myCurrentDestination}
+    destination={myDestination}
+    apikey={GOOGLE_MAPS_APIKEY}
+    strokeWidth={3}
+    mode={'WALKING'}
+    strokeColor="hotpink"
+  />;
 */
-
   const switchFiltering = () => {
     if (!filterMode) {
       filterSchedule();
-      if (schedule.length != 0){
+      if (schedule.length != 0) {
         setFilterMode(true);
       }
     } else {
@@ -378,6 +384,16 @@ const Main = (props) => {
                 }}>
                 <Text style={styles.menuButton}>Navigate</Text>
               </Pressable>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column-reverse',
+                  paddingBottom: '10%',
+                }}>
+                <Image
+                  style={{alignSelf: 'center', width: '35%', height: '21%'}}
+                  source={require('../assets/settingsicon.png')}></Image>
+              </View>
             </View>
           </View>
         </View>
