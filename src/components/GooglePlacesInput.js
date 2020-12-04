@@ -39,7 +39,6 @@ const GooglePlacesInput = (props) => {
         Jedlíkova,
         HlavnáStanica,
         FerkaUrbánka,
-        FerkaUrbánka,
         BoženyNemcovej,
         EasterEgg,
       ]}

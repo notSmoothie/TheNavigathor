@@ -11,7 +11,7 @@ const FerkaUrbánka = {
   geometry: {location: {lat: 48.73518866876783, lng: 21.24609767812478}},
 };
 const HlavnáStanica = {
-  description: 'HlavnáStanica',
+  description: 'Hlavná Stanica',
   geometry: {location: {lat: 48.722348873128006, lng: 21.266592456519074}},
 };
 const EasterEgg = {

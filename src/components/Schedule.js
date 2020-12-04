@@ -35,8 +35,10 @@ const Schedule = (props) => {
       const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
       const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
       const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
+      var roomAndBuilding = e.location.split('(')
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
 
-      mon.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add)}</Text>);
+      mon.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
     }
     if (e.day == 2) {
       var add;
@@ -51,8 +53,10 @@ const Schedule = (props) => {
       const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
       const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
       const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
+      var roomAndBuilding = e.location.split('(')
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
 
-      tue.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add)}</Text>);
+      tue.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
     }
     if (e.day == 3) {
       var add;
@@ -68,7 +72,10 @@ const Schedule = (props) => {
       const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
       const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
 
-      wed.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add)}</Text>);
+      var roomAndBuilding = e.location.split('(')
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+
+      wed.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
     }
     if (e.day == 4) {
       var add;
@@ -84,7 +91,10 @@ const Schedule = (props) => {
       const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
       const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
 
-      thu.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add)}</Text>);
+      var roomAndBuilding = e.location.split('(')
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+
+      thu.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
     }
     if (e.day == 5) {
       var add;  function checkAdd() {
@@ -102,7 +112,10 @@ const Schedule = (props) => {
       const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
       const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
 
-      fri.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add)}</Text>);
+      var roomAndBuilding = e.location.split('(')
+      roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+
+      fri.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
     }
   });
 

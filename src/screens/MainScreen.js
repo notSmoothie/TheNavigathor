@@ -50,6 +50,40 @@ const MainScreen = ({navigation}) => {
     const Rooms = useAsync(getRooms);
 
     if (Markers.loading == false && Rooms.loading == false) {
+      Rooms.value = Rooms.value.filter((e) => {
+        if (
+          e.roomType.name.toUpperCase().includes('Učebňa'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Telocvičňa'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Rysovňa'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Poslucháreň'.toUpperCase()) ||
+          e.roomType.name
+            .toUpperCase()
+            .includes('Laboratórium'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Kabinet'.toUpperCase()) ||
+          e.roomType.name
+            .toUpperCase()
+            .includes('Internetová miestnosť'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Bufet'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Aula'.toUpperCase()) ||
+          e.roomType.name.toUpperCase().includes('Ateliér'.toUpperCase())
+        ) {
+          return e;
+        }
+      });
+
+      // rooms = rooms.sort(function (a, b) {
+      //   var roomNameA = a.roomType.name.toUpperCase();
+      //   var roomNameB = b.roomType.name.toUpperCase();
+      //   if (roomNameA < roomNameB) {
+      //     return -1;
+      //   }
+      //   if (roomNameA > roomNameB) {
+      //     return 1;
+      //   }
+
+      //   return 0;
+      // });
+
       return (
         <Main
           navigation={navigation}

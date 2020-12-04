@@ -55,8 +55,6 @@ const ChooseiCal = (props) => {
       FileSystem.writeAsStringAsync(cacheFilePath, JSON.stringify(string));
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        alert('Canceled from single doc picker');
-      } else {
         alert('Unknown Error: ' + JSON.stringify(err));
         throw err;
       }

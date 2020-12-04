@@ -20,7 +20,6 @@ import CanteenView from './CanteenView';
 
 import MapViewDirections from 'react-native-maps-directions';
 import NavigateMe from './NavigateMe';
-import {or} from 'react-native-reanimated';
 
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
@@ -52,6 +51,10 @@ const Main = (props) => {
 
   const IC_ARR_DOWN = require('../assets/chevron/jozef.png');
   const IC_ARR_UP = require('../assets/chevron/stefan.png');
+  const IC_CLOSE = require('../assets/close.png');
+  const IC_SPECIAL_BUTTON = require('../assets/close_special.png');
+
+  const GOLD = 'rgb(255,215,0)';
 
   const [showRoute, setShowRoute] = useState(false);
   const [myLocation, setMyLocation] = useState({
@@ -111,7 +114,7 @@ const Main = (props) => {
   function RenderItems(props) {
     return props.items.map((a) => {
       return (
-        <Text key={uuidv4()} style={{padding: 0, color: "rgb(255,215,0)"}}>
+        <Text key={uuidv4()} style={{padding: 0, color: GOLD}}>
           {a}
         </Text>
       );
@@ -141,6 +144,19 @@ const Main = (props) => {
           if (element.name != null && element.name.length > 0) {
             return element;
           }
+        });
+
+        filteredRooms = filteredRooms.sort(function (a, b) {
+          var roomNameA = a.level.toUpperCase();
+          var roomNameB = b.level.toUpperCase();
+          if (roomNameA < roomNameB) {
+            return -1;
+          }
+          if (roomNameA > roomNameB) {
+            return 1;
+          }
+
+          return 0;
         });
 
         filteredRooms = filteredRooms.sort(function (a, b) {
@@ -189,7 +205,17 @@ const Main = (props) => {
 
         return (
           <View style={styles.footer}>
-            <Text style={{textAlign: 'center', padding: 5, color: "rgb(255,215,0)", fontWeight:"bold"}}>
+            <Image
+              style={{position: 'absolute', top: '-10.5%', alignSelf: 'center'}}
+              source={IC_SPECIAL_BUTTON}></Image>
+            <Text
+              style={{
+                textAlign: 'center',
+                padding: 5,
+                paddingTop: 17,
+                color: GOLD,
+                fontWeight: 'bold',
+              }}>
               {name} - {description}
             </Text>
             <ScrollView style={{alignSelf: 'stretch'}}>
@@ -291,6 +317,26 @@ const Main = (props) => {
             }}></Pressable>
           <View style={styles.settings}>
             <View style={styles.settingsMenu}>
+              <View style={{justifyContent: 'center', alignContent: 'center'}}>
+                <Pressable
+                  onPress={() => {
+                    setShowSettings(false);
+                  }}>
+                  <Image
+                    style={{position: 'absolute', left: 5, top: 5}}
+                    source={IC_CLOSE}></Image>
+                </Pressable>
+                <Text
+                  style={{
+                    color: GOLD,
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                    textAlign: 'center',
+                    paddingTop: 20,
+                  }}>
+                  MENU
+                </Text>
+              </View>
               <StyleSwitch
                 style={styles.menuButton}
                 mapStyle={changeMapStyle}></StyleSwitch>
@@ -438,11 +484,13 @@ const styles = StyleSheet.create({
   },
   settings: {
     flex: 10,
-    backgroundColor: 'rgba(255, 255, 255, 1)',
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.94)',
   },
   settingsBack: {
     flex: 6,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   settingsMenu: {
     flex: 1,
@@ -450,10 +498,13 @@ const styles = StyleSheet.create({
   menuButton: {
     padding: 10,
     fontSize: 16,
-    textAlign: 'center',
+    color: 'rgb(255,215,0)',
+    textAlign: 'left',
+    paddingLeft: 25,
+    padding: 20,
     borderRadius: 30,
     borderBottomWidth: 1,
-    borderColor: 'rgb(158, 158, 158)',
+    borderColor: 'rgb(255, 215, 0)',
   },
   settingsIcon: {
     position: 'absolute',
