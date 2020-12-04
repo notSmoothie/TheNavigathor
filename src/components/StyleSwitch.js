@@ -5,7 +5,7 @@ const StyleSwitch = (props) => {
   return (
     <View>
       <Pressable onPress={props.mapStyle}>
-        <Text style={props.style}>Switch Mode</Text>
+        <Text style={props.style}>Light/Dark Mode</Text>
       </Pressable>
     </View>
   );

@@ -68,7 +68,7 @@ const ChooseiCal = (props) => {
       <Pressable onPress={() => {
         selectOneFile()
       }}>
-        <Text style={props.style}>Import schedule (.ICS)</Text>
+        <Text style={props.style}>Import Schedule (.ICS)</Text>
       </Pressable>
     </View>
   );

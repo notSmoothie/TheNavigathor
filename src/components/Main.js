@@ -298,7 +298,9 @@ const Main = (props) => {
   const switchFiltering = () => {
     if (!filterMode) {
       filterSchedule();
-      setFilterMode(true);
+      if (schedule.length != 0){
+        setFilterMode(true);
+      }
     } else {
       setMarkers(originalMarkers);
       setFilterMode(false);
@@ -374,7 +376,7 @@ const Main = (props) => {
                 onPress={() => {
                   props.navigation.navigate('CP');
                 }}>
-                <Text style={styles.menuButton}>Find CP</Text>
+                <Text style={styles.menuButton}>Navigate</Text>
               </Pressable>
             </View>
           </View>
