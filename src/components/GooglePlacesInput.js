@@ -31,6 +31,30 @@ const GooglePlacesInput = (props) => {
       currentLocationLabel="From current location"
       placeholder="Search"
       minLength={2}
+      styles={{
+        textInputContainer: {
+          backgroundColor:"rgb(255,215,0)", 
+          color:'black'
+        },
+        textInput: {
+          height: 38,
+          color: 'black',
+          fontWeight: "bold",
+          backgroundColor:"rgb(255,215,0)", 
+          fontSize: 16,
+        },
+        row: {
+          backgroundColor:"rgb(255,215,0)", 
+          color:'black'
+        },
+        listView: {
+          backgroundColor:"rgb(255,215,0)", 
+          color:'black'
+        },
+        predefinedPlacesDescription: {
+          color: 'black',
+        },
+      }}
       autoFocus={true}
       returnKeyType={'search'}
       listViewDisplayed={'auto'}

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, Button, View, StyleSheet} from 'react-native';
+import {Text, Button, View, StyleSheet, Pressable} from 'react-native';
 import GooglePlacesInput from './GooglePlacesInput';
 import getDirections from 'react-native-google-maps-directions';
 
@@ -52,16 +52,16 @@ const CPNavigationButton = (props) => {
     <View style={styles.containerGoogle}>
       <View style={styles.wrapper}>
         <View style={styles.smallerContainer}>
-          <Text>Odkiaľ:</Text>
+          <Text style={styles.text}>Odkiaľ:</Text>
           <View style={styles.inputContainer}>
-            <GooglePlacesInput
+            <GooglePlacesInput 
               notifyChange={(loc) =>
                 getCoordsOfOrigin(loc)
               }></GooglePlacesInput>
           </View>
         </View>
         <View style={styles.smallerContainer}>
-          <Text>Kam:</Text>
+          <Text style={styles.text}>Kam:</Text>
           <View style={styles.inputContainer}>
             <GooglePlacesInput
               notifyChange={(loc) =>
@@ -69,9 +69,10 @@ const CPNavigationButton = (props) => {
               }></GooglePlacesInput>
           </View>
         </View>
-        <Button title="Navigate me!" onPress={() => handleGetDirections()} />
+        <Pressable color="rgb(255,215,0)" onPress={() => handleGetDirections()}>
+          <Text style={{color: '#000000', backgroundColor:"#ffd700", textAlign:"center", padding:"3%"}}>Navigate</Text>
+          </Pressable>
       </View>
-      <Button title="Home" onPress={() => props.navigation.navigate('Home')} />
     </View>
   );
 };
@@ -79,22 +80,25 @@ const CPNavigationButton = (props) => {
 const styles = StyleSheet.create({
   containerGoogle: {
     flex: 1,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#000000',
   },
   smallerContainer: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#000000',
   },
   inputContainer: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#000000',
+  },
+  text:{
+    color: "rgb(255,215,0)"
   },
   wrapper: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#000000',
   },
 });
 //        <Button onPress={this.handleGetDirections} title="Get Directions" />

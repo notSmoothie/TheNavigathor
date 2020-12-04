@@ -7,7 +7,7 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import * as FileSystem from 'expo-file-system';
 
 import ChooseiCal from './ChooseiCal';
@@ -36,6 +36,7 @@ const Main = (props) => {
 
   const [schedule, setSchedule] = useState([]);
   const [filterMode, setFilterMode] = useState(false);
+  const [scheduleLoaded, setScheduleLoaded] = useState(false);
 
   const [rooms, setRooms] = useState(originalRooms);
   const [buildingRooms, setBuildingRooms] = useState([]);
@@ -70,6 +71,7 @@ const Main = (props) => {
     if (fileInfo.exists) {
       const schedule = await FileSystem.readAsStringAsync(schedulePath);
       setSchedule(JSON.parse(schedule));
+      setScheduleLoaded(true);
     }
   }
 
@@ -95,7 +97,12 @@ const Main = (props) => {
         return hue;
       }
     });
-    setMarkers(filteredMarkers);
+
+    if (filteredMarkers.length == 0) {
+      alert('Schedule must be loaded.');
+    } else {
+      setMarkers(filteredMarkers);
+    }
   }
 
   function getRoomsInBuilding(id) {
@@ -306,6 +313,15 @@ const Main = (props) => {
     }
   };
 
+  async function loadScheduleAfterLoad() {
+    if (!scheduleLoaded) {
+      await loadSchedule();
+      setScheduleLoaded(true);
+    } else {
+      setScheduleLoaded(false);
+    }
+  }
+
   const Settings = (mapStyle) => {
     if (showSettings) {
       return (
@@ -343,7 +359,9 @@ const Main = (props) => {
               <FilterSwitch
                 style={styles.menuButton}
                 filterMode={switchFiltering}></FilterSwitch>
-              <ChooseiCal style={styles.menuButton}></ChooseiCal>
+              <ChooseiCal
+                loadSchedule={loadScheduleAfterLoad}
+                style={styles.menuButton}></ChooseiCal>
               <Pressable
                 onPress={() => {
                   props.navigation.navigate('Schedule', {
@@ -439,10 +457,14 @@ const Main = (props) => {
               latitude: parseFloat(marker.latlng.split(',')[0]),
               longitude: parseFloat(marker.latlng.split(',')[1]),
             }}
-            title={marker.title}
-            description={marker.description}
-            image={markerImage}
-          />
+            image={markerImage}>
+            <Callout>
+              <View style={{backgroundColor: 'aqua'}}>
+                <Text> {marker.title} </Text>
+                <Text>{marker.description}</Text>
+              </View>
+            </Callout>
+          </Marker>
         ))}
 
         {/* <Navigation /> */}

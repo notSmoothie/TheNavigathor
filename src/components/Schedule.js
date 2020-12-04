@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import 'react-native-get-random-values';
+import { color } from 'react-native-reanimated';
 import {v4 as uuidv4} from 'uuid';
 
 const Schedule = (props) => {
@@ -25,20 +26,21 @@ const Schedule = (props) => {
     if (e.day == 1) {
       var add;
       if (e.summary.split('(')[1].toUpperCase().includes("Cvičenie".toUpperCase())) {
-        add = " - CV"
+        add = e.summary.split('(')[1].toUpperCase()
       } else if (e.summary.split('(')[1].toUpperCase().includes("Prednáška".toUpperCase())) {
-        add = " - P"
+        add = e.summary.split('(')[1].toUpperCase()
       } else if (e.summary.split('(')[1].toUpperCase().includes("Seminár".toUpperCase())) {
-        add = " - S"
+        add = e.summary.split('(')[1].toUpperCase()
       }
 
       const startDate = e.startDate.split('T')[1].slice(0, 2).concat(':').concat(e.startDate.split('T')[1].slice(2, 4))
       const endDate = e.endDate.split('T')[1].slice(0, 2).concat(':').concat(e.endDate.split('T')[1].slice(2, 4))
-      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("] ")
+      const date = '['.concat(startDate).concat(" - ").concat(endDate).concat("]")
       var roomAndBuilding = e.location.split('(')
       roomAndBuilding = roomAndBuilding[roomAndBuilding.length - 1].slice(0, roomAndBuilding[roomAndBuilding.length - 1].length - 1)
+      const subject = e.summary.split('(')[0]
 
-      mon.push(<Text key={uuidv4()} style={styles.subject}>{date.concat(e.summary.split('(')[0]).concat(add).concat(' (').concat(roomAndBuilding).concat(")")}</Text>);
+      mon.push(<Text key={uuidv4()} style={styles.subject}>{}</Text>);
     }
     if (e.day == 2) {
       var add;
@@ -124,7 +126,7 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={{fontSize: 20}}>Monday</Text>
+          <Text key={uuidv4()} style={styles.day}>Monday</Text>
           {mon}
         </View>
       </View>,
@@ -135,7 +137,7 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={{fontSize: 20}}>Tuesday</Text>
+          <Text key={uuidv4()} style={styles.day}>Tuesday</Text>
           {tue}
         </View>
       </View>,
@@ -146,7 +148,7 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={{fontSize: 20}}>Wednesday</Text>
+          <Text key={uuidv4()} style={styles.day}>Wednesday</Text>
           {wed}
         </View>
       </View>,
@@ -157,7 +159,7 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={{fontSize: 20}}>Thursday</Text>
+          <Text key={uuidv4()} style={styles.day}>Thursday</Text>
           {thu}
         </View>
       </View>,
@@ -168,27 +170,36 @@ const Schedule = (props) => {
     scheduleToRender.push(
       <View style={styles.row}>
         <View style={styles.col}>
-          <Text key={uuidv4()} style={{fontSize: 20}}>Friday</Text>
+          <Text key={uuidv4()} style={styles.day}>Friday</Text>
           {fri}
         </View>
       </View>,
     );
   }
 
-  return <View style={styles.container}>{scheduleToRender}</View>;
+  return <ScrollView justifyContent="center" style={styles.container}>{scheduleToRender}</ScrollView>;
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignSelf:"stretch",
+    backgroundColor:"black",
     alignContent: 'center',
-    justifyContent: 'center',
   },
   row: {
     flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  subject:{
+    color:"rgb(255,215,0)"
+  },
+  day:{
+    fontSize: 20,
+    color:"rgb(255,215,0)",
+    fontWeight:"bold"
   },
   col: {
     flex: 1,
