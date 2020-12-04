@@ -457,14 +457,10 @@ const Main = (props) => {
               latitude: parseFloat(marker.latlng.split(',')[0]),
               longitude: parseFloat(marker.latlng.split(',')[1]),
             }}
-            image={markerImage}>
-            <Callout>
-              <View style={{backgroundColor: 'aqua'}}>
-                <Text> {marker.title} </Text>
-                <Text>{marker.description}</Text>
-              </View>
-            </Callout>
-          </Marker>
+            title={marker.title}
+            description={marker.description}
+            image={markerImage}
+          />
         ))}
 
         {/* <Navigation /> */}
