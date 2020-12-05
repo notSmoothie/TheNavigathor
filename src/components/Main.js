@@ -147,6 +147,13 @@ const Main = (props) => {
       if (markers[id].fetch_attribute != null) {
         return (
           <View style={styles.footer}>
+            <CanteenView
+              canteenType={markers[id].fetch_attribute.split(',')[0]}
+              order={markers[id].fetch_attribute.split(',')[1]}
+              lightMode={mapStyle == LightMode}></CanteenView>
+            <Image
+              style={{position: 'absolute', top: '-10.5%', alignSelf: 'center'}}
+              source={IC_SPECIAL_BUTTON}></Image>
             <NavigateMe
               style={{
                 position: 'absolute',
@@ -154,10 +161,6 @@ const Main = (props) => {
                 right: '5%',
               }}
               callBack={navigateMeToMarker}></NavigateMe>
-            <CanteenView
-              canteenType={markers[id].fetch_attribute.split(',')[0]}
-              order={markers[id].fetch_attribute.split(',')[1]}
-              lightMode={mapStyle == LightMode}></CanteenView>
           </View>
         );
       } else {
@@ -414,8 +417,9 @@ const Main = (props) => {
                   flexDirection: 'column-reverse',
                   paddingBottom: '10%',
                 }}>
+                <Text style={{color: 'rgb(255,215,0)', textAlign: 'center', fontWeight:'100'}}>Ver 1.0.0</Text>
                 <Image
-                  style={{alignSelf: 'center', width: '35%', height: '21%'}}
+                  style={{alignSelf: 'center', width: '20%', maxHeight: '30%'}}
                   source={require('../assets/settingsicon.png')}></Image>
               </View>
             </View>
@@ -458,7 +462,7 @@ const Main = (props) => {
         loadingEnabled={true}
         rotateEnabled={false}
         showsCompass={false}
-        showsUserLocation={true}
+        showsUserLocation={false}
         onPress={() => {
           setShowFooter(false);
           map.animateCamera({
