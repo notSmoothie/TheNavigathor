@@ -20,11 +20,11 @@ const CPNavigationButton = (props) => {
       params: [
         {
           key: 'travelmode',
-          value: 'transit', // may be "walking", "bicycling" or "transit" as well
+          value: 'transit',
         },
         {
           key: 'dir_action',
-          value: 'navigate', // this instantly initializes navigation using the given travel mode
+          value: 'navigate',
         },
       ],
     };
@@ -54,7 +54,7 @@ const CPNavigationButton = (props) => {
         <View style={styles.smallerContainer}>
           <Text style={styles.text}>Odkiaľ:</Text>
           <View style={styles.inputContainer}>
-            <GooglePlacesInput 
+            <GooglePlacesInput
               notifyChange={(loc) =>
                 getCoordsOfOrigin(loc)
               }></GooglePlacesInput>
@@ -70,8 +70,16 @@ const CPNavigationButton = (props) => {
           </View>
         </View>
         <Pressable color="rgb(255,215,0)" onPress={() => handleGetDirections()}>
-          <Text style={{color: '#000000', backgroundColor:"#ffd700", textAlign:"center", padding:"3%"}}>Navigate</Text>
-          </Pressable>
+          <Text
+            style={{
+              color: '#000000',
+              backgroundColor: '#ffd700',
+              textAlign: 'center',
+              padding: '3%',
+            }}>
+            Navigate
+          </Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -92,8 +100,8 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#000000',
   },
-  text:{
-    color: "rgb(255,215,0)"
+  text: {
+    color: 'rgb(255,215,0)',
   },
   wrapper: {
     flex: 1,

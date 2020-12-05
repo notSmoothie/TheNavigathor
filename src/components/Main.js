@@ -47,6 +47,7 @@ const Main = (props) => {
   const [showFooter, setShowFooter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
+  const [mapStyleMode, setMapStyleMode] = useState(true);
   const [mapStyle, setMapStyle] = useState(DarkMode);
   const [markerImage] = useState(require('../assets/location.png'));
 
@@ -140,7 +141,13 @@ const Main = (props) => {
       if (markers[id].fetch_attribute != null) {
         return (
           <View style={styles.footer}>
-            <NavigateMe></NavigateMe>
+            <NavigateMe
+              style={{
+                position: 'absolute',
+                top: '-10.5%',
+                right: '5%',
+              }}
+              callBack={navigateMeToMarker}></NavigateMe>
             <CanteenView
               canteenType={markers[id].fetch_attribute.split(',')[0]}
               order={markers[id].fetch_attribute.split(',')[1]}
@@ -217,6 +224,7 @@ const Main = (props) => {
               style={{position: 'absolute', top: '-10.5%', alignSelf: 'center'}}
               source={IC_SPECIAL_BUTTON}></Image>
             <NavigateMe
+              callBack={navigateMeToMarker}
               style={{
                 position: 'absolute',
                 top: '-10.5%',
@@ -272,7 +280,11 @@ const Main = (props) => {
   }
 
   const navigateMeToMarker = () => {
-    setShowRoute(true);
+    if (showRoute == true) {
+      setShowRoute(false);
+    } else {
+      setShowRoute(true);
+    }
   };
 
   function Navigation() {
@@ -301,6 +313,7 @@ const Main = (props) => {
     strokeColor="hotpink"
   />;
 */
+
   const switchFiltering = () => {
     if (!filterMode) {
       filterSchedule();
@@ -315,8 +328,10 @@ const Main = (props) => {
 
   const changeMapStyle = () => {
     if (mapStyle == LightMode) {
+      setMapStyleMode(true);
       setMapStyle(DarkMode);
     } else if (mapStyle == DarkMode) {
+      setMapStyleMode(false);
       setMapStyle(LightMode);
     }
   };
@@ -362,8 +377,10 @@ const Main = (props) => {
                 </Text>
               </View>
               <StyleSwitch
+                mode={mapStyleMode}
                 style={styles.menuButton}
                 mapStyle={changeMapStyle}></StyleSwitch>
+
               <FilterSwitch
                 style={styles.menuButton}
                 filterMode={switchFiltering}></FilterSwitch>
@@ -414,6 +431,7 @@ const Main = (props) => {
   return (
     <View style={styles.container}>
       <MapView
+        userLocationPriority={'low'}
         ref={(ref) => {
           setMap(ref);
         }}
@@ -433,7 +451,7 @@ const Main = (props) => {
         loadingEnabled={true}
         rotateEnabled={false}
         showsCompass={false}
-        showsUserLocation={false}
+        showsUserLocation={true}
         onPress={() => {
           setShowFooter(false);
           map.animateCamera({
@@ -481,7 +499,7 @@ const Main = (props) => {
           />
         ))}
 
-        {/* <Navigation /> */}
+        {<Navigation></Navigation>}
       </MapView>
       <Footer></Footer>
       <Settings currentMapStyle={mapStyle}></Settings>
