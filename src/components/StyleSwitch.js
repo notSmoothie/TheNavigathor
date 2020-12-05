@@ -7,15 +7,21 @@ const StyleSwitch = (props) => {
       <Pressable
         style={{flexDirection: 'row', alignItems: 'center'}}
         onPress={props.mapStyle}>
-        <Text style={props.style}>Light/Dark Mode</Text>
+        <Text style={props.style}>Light Mode</Text>
         {props.mode ? (
           <Image
-            style={{marginLeft: 50}}
-            source={require('../assets/component14.png')}></Image>
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            source={require('../assets/switch_off.png')}></Image>
         ) : (
           <Image
-            style={{marginLeft: 50}}
-            source={require('../assets/component15.png')}></Image>
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            source={require('../assets/switch_on.png')}></Image>
         )}
       </Pressable>
     </View>

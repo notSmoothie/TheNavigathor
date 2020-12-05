@@ -2,21 +2,26 @@ import React from 'react';
 import {Pressable, Text, View, Image} from 'react-native';
 
 const StyleSwitch = (props) => {
-  console.log(props.filterMode);
   return (
     <View>
       <Pressable
         style={{flexDirection: 'row', alignItems: 'center'}}
         onPress={props.filterMode}>
-        <Text style={props.style}>Switch Filter</Text>
+        <Text style={props.style}>Filter By Schedule</Text>
         {props.mode ? (
           <Image
-            style={{marginLeft: 50}}
-            source={require('../assets/component14.png')}></Image>
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            source={require('../assets/switch_on.png')}></Image>
         ) : (
           <Image
-            style={{marginLeft: 50}}
-            source={require('../assets/component15.png')}></Image>
+            style={{
+              position: 'absolute',
+              right: 10,
+            }}
+            source={require('../assets/switch_off.png')}></Image>
         )}
       </Pressable>
     </View>

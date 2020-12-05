@@ -33,7 +33,6 @@ const CPNavigationButton = (props) => {
   };
 
   function getCoordsOfOrigin(loc) {
-    console.log(loc);
     setOrigin({
       latitude: loc.lat,
       longitude: loc.lng,
@@ -41,7 +40,6 @@ const CPNavigationButton = (props) => {
   }
 
   function getCoordsOfDestination(loc) {
-    console.log(loc);
     setDestination({
       latitude: loc.lat,
       longitude: loc.lng,
