@@ -59,10 +59,16 @@ const Main = (props) => {
   const GOLD = 'rgb(255,215,0)';
 
   const [showRoute, setShowRoute] = useState(false);
-  const [myLocation, setMyLocation] = useState({
+  const [myLocation, _setMyLocation] = useState({
     latitude: 48.730425397478086,
     longitude: 21.245568194134698,
   });
+
+  function setMyLocation(location) {
+    if (!showFooter) {
+      _setMyLocation(location);
+    }
+  }
 
   async function loadSchedule() {
     const schedulePath = FileSystem.documentDirectory.concat(
@@ -383,6 +389,7 @@ const Main = (props) => {
 
               <FilterSwitch
                 style={styles.menuButton}
+                mode={filterMode}
                 filterMode={switchFiltering}></FilterSwitch>
               <ChooseiCal
                 loadSchedule={loadScheduleAfterLoad}

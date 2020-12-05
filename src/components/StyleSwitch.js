@@ -4,12 +4,18 @@ import {Pressable, Text, View, Image} from 'react-native';
 const StyleSwitch = (props) => {
   return (
     <View>
-      <Pressable onPress={props.mapStyle}>
+      <Pressable
+        style={{flexDirection: 'row', alignItems: 'center'}}
+        onPress={props.mapStyle}>
         <Text style={props.style}>Light/Dark Mode</Text>
         {props.mode ? (
-          <Image source={require('../assets/chevron/jozef.png')}></Image>
+          <Image
+            style={{marginLeft: 50}}
+            source={require('../assets/component14.png')}></Image>
         ) : (
-          <Image source={require('../assets/chevron/stefan.png')}></Image>
+          <Image
+            style={{marginLeft: 50}}
+            source={require('../assets/component15.png')}></Image>
         )}
       </Pressable>
     </View>
