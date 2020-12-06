@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 });
 
 const ScheduleScreen = ({navigation, route}) => {
-  return <Schedule schedule={route.params.schedule}></Schedule>;
+  return <Schedule navigation={navigation} setMarkerNameFromSchedule={route.params.setMarkerNameFromSchedule} setMarkerName={route.params.setMarkerName} schedule={route.params.schedule}></Schedule>;
 };
 
 export default ScheduleScreen;

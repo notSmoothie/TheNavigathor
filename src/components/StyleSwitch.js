@@ -5,6 +5,7 @@ const StyleSwitch = (props) => {
   return (
     <View>
       <Pressable
+        android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}
         style={{flexDirection: 'row', alignItems: 'center'}}
         onPress={props.mapStyle}>
         <Text style={props.style}>Light Mode</Text>

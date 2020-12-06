@@ -33,6 +33,7 @@ const Main = (props) => {
   const originalRooms = props.rooms;
 
   const [map, setMap] = useState();
+  const [markerRef, setMarkerRef] = useState([]);
 
   const [schedule, setSchedule] = useState([]);
   const [filterMode, setFilterMode] = useState(false);
@@ -43,6 +44,8 @@ const Main = (props) => {
 
   const [markers, setMarkers] = useState(originalMarkers);
   const [latestMarkerId, setLatestMarkerId] = useState();
+  const [markerName, setMarkerName] = useState('');
+  const [markerNameFromSchedule, setMarkerNameFromSchedule] = useState(false);
 
   const [showFooter, setShowFooter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -87,9 +90,10 @@ const Main = (props) => {
   }, []);
 
   function filterSchedule() {
-    var count = 1;
+    let count = 1;
+    setMarkers(originalMarkers);
     const filteredMarkers = markers.filter((marker) => {
-      var hue = null;
+      let hue = null;
       schedule.map((e) => {
         if (
           e.location.toUpperCase().includes(marker.title.toUpperCase()) ||
@@ -140,7 +144,7 @@ const Main = (props) => {
       if (latestMarkerId == undefined) {
         return <View style={styles.footer}></View>;
       }
-      var id = latestMarkerId;
+      let id = latestMarkerId;
       const name = markers[id].title;
       const description = markers[id].description;
 
@@ -164,15 +168,15 @@ const Main = (props) => {
           </View>
         );
       } else {
-        var filteredRooms = buildingRooms.filter((element) => {
+        let filteredRooms = buildingRooms.filter((element) => {
           if (element.name != null && element.name.length > 0) {
             return element;
           }
         });
 
         filteredRooms = filteredRooms.sort(function (a, b) {
-          var roomNameA = a.level.toUpperCase();
-          var roomNameB = b.level.toUpperCase();
+          let roomNameA = a.level.toUpperCase();
+          let roomNameB = b.level.toUpperCase();
           if (roomNameA < roomNameB) {
             return -1;
           }
@@ -184,8 +188,8 @@ const Main = (props) => {
         });
 
         filteredRooms = filteredRooms.sort(function (a, b) {
-          var roomNameA = a.roomType.name.toUpperCase();
-          var roomNameB = b.roomType.name.toUpperCase();
+          let roomNameA = a.roomType.name.toUpperCase();
+          let roomNameB = b.roomType.name.toUpperCase();
           if (roomNameA < roomNameB) {
             return -1;
           }
@@ -196,8 +200,8 @@ const Main = (props) => {
           return 0;
         });
 
-        var items = [];
-        var item = {
+        let items = [];
+        let item = {
           title: '',
           body: '',
         };
@@ -345,6 +349,50 @@ const Main = (props) => {
     }
   };
 
+  function pressMarker() {
+    if (markerName.length > 0) {
+      setShowSettings(false);
+
+      let markerToPress;
+      markers.map((m) => {
+        if (m.title == markerName.split('-')[0] || m.title == markerName.split('_')[0]) {
+          if (
+            m.title == 'L9' &&
+            (m.description.includes(markerName.split('-')[1].slice(0, 1)) ||
+            m.description.includes(markerName.split('_')[1].slice(0, 1)))
+          ) {
+            markerToPress = m;
+            markerRef[m.id - 1].showCallout();
+          } else if (m.title != 'L9') {
+            markerToPress = m;
+            markerRef[m.id - 1].showCallout();
+          }
+        }
+      });
+      setLatestMarkerId(markerToPress.id - 1);
+      getRoomsInBuilding(markerToPress.id - 1);
+      setShowFooter(true);
+
+      map.animateCamera({
+        center: {
+          latitude: parseFloat(markerToPress.latlng.split(',')[0]),
+          longitude: parseFloat(markerToPress.latlng.split(',')[1]),
+        },
+        zoom: 17,
+      });
+    }
+  }
+
+  useEffect(
+    function () {
+      if (markerNameFromSchedule) {
+        setMarkerNameFromSchedule(false);
+        pressMarker(markerName);
+      }
+    },
+    [markerNameFromSchedule],
+  );
+
   async function loadScheduleAfterLoad() {
     if (!scheduleLoaded) {
       await loadSchedule();
@@ -367,6 +415,7 @@ const Main = (props) => {
             <View style={styles.settingsMenu}>
               <View style={{justifyContent: 'center', alignContent: 'center'}}>
                 <Pressable
+                android_ripple={{color:'rgb(255,215,0)', borderless: "true"}}
                   onPress={() => {
                     setShowSettings(false);
                   }}>
@@ -389,7 +438,6 @@ const Main = (props) => {
                 mode={mapStyleMode}
                 style={styles.menuButton}
                 mapStyle={changeMapStyle}></StyleSwitch>
-
               <FilterSwitch
                 style={styles.menuButton}
                 mode={filterMode}
@@ -398,17 +446,22 @@ const Main = (props) => {
                 loadSchedule={loadScheduleAfterLoad}
                 style={styles.menuButton}></ChooseiCal>
               <Pressable
+              android_ripple={{color:'rgb(255,215,0)', borderless: "true"}}
                 onPress={() => {
                   props.navigation.navigate('Schedule', {
                     schedule: schedule,
+                    setMarkerName: setMarkerName,
+                    setMarkerNameFromSchedule: setMarkerNameFromSchedule,
                   });
                 }}>
                 <Text style={styles.menuButton}>Show Schedule</Text>
               </Pressable>
               <Pressable
+              android_ripple={{color:'rgb(255,215,0)', borderless: "true"}}
                 onPress={() => {
                   props.navigation.navigate('CP');
-                }}>
+                }}
+                >
                 <Text style={styles.menuButton}>Navigate</Text>
               </Pressable>
               <View
@@ -417,7 +470,14 @@ const Main = (props) => {
                   flexDirection: 'column-reverse',
                   paddingBottom: '10%',
                 }}>
-                <Text style={{color: 'rgb(255,215,0)', textAlign: 'center', fontWeight:'100'}}>Ver 1.0.0</Text>
+                <Text
+                  style={{
+                    color: 'rgb(255,215,0)',
+                    textAlign: 'center',
+                    fontWeight: '100',
+                  }}>
+                  Ver 255.215.0
+                </Text>
                 <Image
                   style={{alignSelf: 'center', width: '20%', maxHeight: '30%'}}
                   source={require('../assets/settingsicon.png')}></Image>
@@ -442,7 +502,6 @@ const Main = (props) => {
   return (
     <View style={styles.container}>
       <MapView
-        userLocationPriority={'low'}
         ref={(ref) => {
           setMap(ref);
         }}
@@ -499,6 +558,9 @@ const Main = (props) => {
         customMapStyle={mapStyle}>
         {markers.map((marker) => (
           <Marker
+            ref={(ref) => {
+              markerRef[marker.id - 1] = ref;
+            }}
             identifier={String(marker.id)}
             coordinate={{
               latitude: parseFloat(marker.latlng.split(',')[0]),

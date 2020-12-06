@@ -51,8 +51,11 @@ const ChooseiCal = (props) => {
       );
 
       const string = await convert(icsFile);
-      await FileSystem.writeAsStringAsync(cacheFilePath, JSON.stringify(string));
-      props.loadSchedule()
+      await FileSystem.writeAsStringAsync(
+        cacheFilePath,
+        JSON.stringify(string),
+      );
+      props.loadSchedule();
     } catch (err) {
       if (DocumentPicker.isCancel) {
         return;
@@ -65,9 +68,11 @@ const ChooseiCal = (props) => {
 
   return (
     <View>
-      <Pressable onPress={() => {
-        selectOneFile()
-      }}>
+      <Pressable
+        android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}
+        onPress={() => {
+          selectOneFile();
+        }}>
         <Text style={props.style}>Import Schedule (.ICS)</Text>
       </Pressable>
     </View>

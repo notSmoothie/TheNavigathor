@@ -1,7 +1,6 @@
 import React from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, ScrollView, StyleSheet, Pressable} from 'react-native';
 import 'react-native-get-random-values';
-import {color} from 'react-native-reanimated';
 import {v4 as uuidv4} from 'uuid';
 
 const Schedule = (props) => {
@@ -65,27 +64,35 @@ const Schedule = (props) => {
       const subject = e.summary.split('(')[0];
 
       mon.push(
-        <View style={styles.predmet}>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            {subject}
-          </Text>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            ({type})
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Od: {startDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Do: {endDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Učebňa: {roomAndBuilding}
-          </Text>
-        </View>
+        <Pressable
+          onPress={() => {
+            props.setMarkerName(roomAndBuilding);
+            props.setMarkerNameFromSchedule(true);
+            props.navigation.navigate('Home');
+          }}
+          android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}>
+          <View style={styles.predmet}>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              {subject}
+            </Text>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              ({type})
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Od: {startDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Do: {endDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Učebňa: {roomAndBuilding}
+            </Text>
+          </View>
+        </Pressable>,
       );
     }
     if (e.day == 2) {
@@ -130,27 +137,35 @@ const Schedule = (props) => {
       const subject = e.summary.split('(')[0];
 
       tue.push(
-        <View style={styles.predmet}>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            {subject}
-          </Text>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            ({type})
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Od: {startDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Do: {endDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Učebňa: {roomAndBuilding}
-          </Text>
-        </View>
+        <Pressable
+          onPress={() => {
+            props.setMarkerName(roomAndBuilding);
+            props.setMarkerNameFromSchedule(true);
+            props.navigation.navigate('Home');
+          }}
+          android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}>
+          <View style={styles.predmet}>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              {subject}
+            </Text>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              ({type})
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Od: {startDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Do: {endDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Učebňa: {roomAndBuilding}
+            </Text>
+          </View>
+        </Pressable>,
       );
     }
     if (e.day == 3) {
@@ -195,27 +210,35 @@ const Schedule = (props) => {
       const subject = e.summary.split('(')[0];
 
       wed.push(
-        <View style={styles.predmet}>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            {subject}
-          </Text>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            ({type})
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Od: {startDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Do: {endDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Učebňa: {roomAndBuilding}
-          </Text>
-        </View>
+        <Pressable
+          onPress={() => {
+            props.setMarkerName(roomAndBuilding);
+            props.setMarkerNameFromSchedule(true);
+            props.navigation.navigate('Home');
+          }}
+          android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}>
+          <View style={styles.predmet}>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              {subject}
+            </Text>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              ({type})
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Od: {startDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Do: {endDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Učebňa: {roomAndBuilding}
+            </Text>
+          </View>
+        </Pressable>,
       );
     }
     if (e.day == 4) {
@@ -260,27 +283,35 @@ const Schedule = (props) => {
       const subject = e.summary.split('(')[0];
 
       thu.push(
-        <View style={styles.predmet}>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            {subject}
-          </Text>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            ({type})
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Od: {startDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Do: {endDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Učebňa: {roomAndBuilding}
-          </Text>
-        </View>
+        <Pressable
+          onPress={() => {
+            props.setMarkerName(roomAndBuilding);
+            props.setMarkerNameFromSchedule(true);
+            props.navigation.navigate('Home');
+          }}
+          android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}>
+          <View style={styles.predmet}>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              {subject}
+            </Text>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              ({type})
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Od: {startDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Do: {endDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Učebňa: {roomAndBuilding}
+            </Text>
+          </View>
+        </Pressable>,
       );
     }
     if (e.day == 5) {
@@ -325,27 +356,35 @@ const Schedule = (props) => {
       const subject = e.summary.split('(')[0];
 
       fri.push(
-        <View style={styles.predmet}>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            {subject}
-          </Text>
-          <Text
-            key={uuidv4()}
-            style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
-            ({type})
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Od: {startDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Do: {endDate}
-          </Text>
-          <Text key={uuidv4()} style={styles.subject}>
-            Učebňa: {roomAndBuilding}
-          </Text>
-        </View>,
+        <Pressable
+          onPress={() => {
+            props.setMarkerName(roomAndBuilding);
+            props.setMarkerNameFromSchedule(true);
+            props.navigation.navigate('Home');
+          }}
+          android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}>
+          <View style={styles.predmet}>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              {subject}
+            </Text>
+            <Text
+              key={uuidv4()}
+              style={{fontWeight: 'bold', color: 'rgb(255,215,0)'}}>
+              ({type})
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Od: {startDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Do: {endDate}
+            </Text>
+            <Text key={uuidv4()} style={styles.subject}>
+              Učebňa: {roomAndBuilding}
+            </Text>
+          </View>
+        </Pressable>,
       );
     }
   });
