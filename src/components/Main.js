@@ -59,6 +59,7 @@ const Main = (props) => {
   const IC_ARR_UP = require('../assets/chevron/stefan.png');
   const IC_CLOSE = require('../assets/close.png');
   const IC_SPECIAL_BUTTON = require('../assets/close_special.png');
+  const [time, setTime] = useState();
 
   const GOLD = 'rgb(255,215,0)';
 
@@ -133,9 +134,24 @@ const Main = (props) => {
   function RenderItems(props) {
     return props.items.map((a) => {
       if (a[0] == '&') {
-        return <Text key={uuidv4()} style={{paddingBottom: 5 ,paddingTop: 5, fontWeight:"bold", color: GOLD}}>{a.split('&')[1]}</Text>;
+        return (
+          <Text
+            key={uuidv4()}
+            style={{
+              paddingBottom: 5,
+              paddingTop: 5,
+              fontWeight: 'bold',
+              color: GOLD,
+            }}>
+            {a.split('&')[1]}
+          </Text>
+        );
       } else {
-        return <Text key={uuidv4()} style={{paddingLeft: 10, color: GOLD}}>{a}</Text>;
+        return (
+          <Text key={uuidv4()} style={{paddingLeft: 10, color: GOLD}}>
+            {a}
+          </Text>
+        );
       }
     });
   }
@@ -315,6 +331,7 @@ const Main = (props) => {
   }
 
   const navigateMeToMarker = () => {
+    console.log(showRoute);
     if (showRoute == true) {
       map.animateCamera({
         center: {
@@ -324,7 +341,7 @@ const Main = (props) => {
         zoom: 15.7,
       });
       setShowRoute(false);
-      setShowFooter(false)
+      setShowFooter(false);
     } else {
       map.animateCamera({
         center: {
@@ -334,7 +351,7 @@ const Main = (props) => {
         zoom: 15.7,
       });
       setShowRoute(true);
-      setShowFooter(false)
+      setShowFooter(false);
     }
   };
 
@@ -348,6 +365,10 @@ const Main = (props) => {
           strokeWidth={4}
           mode={'WALKING'}
           strokeColor="rgb(123, 123, 123)"
+          onReady={(result) => {
+            console.log(result.duration);
+            setTime(result.duration);
+          }}
         />
       );
     } else {
@@ -607,12 +628,28 @@ const Main = (props) => {
             }}
             title={marker.title}
             description={marker.description}
-            image={(marker.fetch_attribute != null) ? canteenImage : markerImage}
+            image={marker.fetch_attribute != null ? canteenImage : markerImage}
           />
         ))}
 
         {<Navigation></Navigation>}
       </MapView>
+      {time != 0 && time != NaN && showRoute ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: 16,
+            left: 10,
+            backgroundColor: 'rgb(255,215,0)',
+            borderRadius: 5,
+          }}>
+          <Text style={{fontSize: 20, padding: 5}}>
+            {parseInt(time) == 0 ? 1 : parseInt(time)} minút do cieľa
+          </Text>
+        </View>
+      ) : (
+        <></>
+      )}
       <Footer></Footer>
       <Settings currentMapStyle={mapStyle}></Settings>
     </View>
