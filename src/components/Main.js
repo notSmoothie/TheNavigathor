@@ -331,7 +331,6 @@ const Main = (props) => {
   }
 
   const navigateMeToMarker = () => {
-    console.log(showRoute);
     if (showRoute == true) {
       map.animateCamera({
         center: {
@@ -366,7 +365,6 @@ const Main = (props) => {
           mode={'WALKING'}
           strokeColor="rgb(123, 123, 123)"
           onReady={(result) => {
-            console.log(result.duration);
             setTime(result.duration);
           }}
         />
@@ -638,13 +636,14 @@ const Main = (props) => {
         <View
           style={{
             position: 'absolute',
-            top: 16,
+            height: 40,
+            top: 10,
             left: 10,
-            backgroundColor: 'rgb(255,215,0)',
+            backgroundColor: 'rgb(21,21,21)',
             borderRadius: 5,
           }}>
-          <Text style={{fontSize: 20, padding: 5}}>
-            {parseInt(time) == 0 ? 1 : parseInt(time)} minút do cieľa
+          <Text style={{fontSize: 20, padding: 5, height: 40, textAlign:'center', color: 'rgb(255,215,0)', fontWeight: 'bold'}}>
+            {parseInt(time) == 0 ? 1 : parseInt(time)} min
           </Text>
         </View>
       ) : (
