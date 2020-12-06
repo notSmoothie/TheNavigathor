@@ -75,6 +75,12 @@ const Main = (props) => {
     }
   }
 
+  useEffect(function () {
+    if (time < 0.1) {
+      setShowRoute(false)
+    }
+  }, [time]);
+
   async function loadSchedule() {
     const schedulePath = FileSystem.documentDirectory.concat(
       'jsonizedIcs.json',
