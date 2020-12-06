@@ -53,6 +53,7 @@ const Main = (props) => {
   const [mapStyleMode, setMapStyleMode] = useState(true);
   const [mapStyle, setMapStyle] = useState(DarkMode);
   const [markerImage] = useState(require('../assets/location.png'));
+  const [canteenImage] = useState(require('../assets/canteen_location.png'));
 
   const IC_ARR_DOWN = require('../assets/chevron/jozef.png');
   const IC_ARR_UP = require('../assets/chevron/stefan.png');
@@ -131,11 +132,11 @@ const Main = (props) => {
 
   function RenderItems(props) {
     return props.items.map((a) => {
-      return (
-        <Text key={uuidv4()} style={{padding: 0, color: GOLD}}>
-          {a}
-        </Text>
-      );
+      if (a[0] == '&') {
+        return <Text key={uuidv4()} style={{paddingBottom: 5 ,paddingTop: 5, fontWeight:"bold", color: GOLD}}>{a.split('&')[1]}</Text>;
+      } else {
+        return <Text key={uuidv4()} style={{paddingLeft: 10, color: GOLD}}>{a}</Text>;
+      }
     });
   }
 
@@ -175,8 +176,18 @@ const Main = (props) => {
         });
 
         filteredRooms = filteredRooms.sort(function (a, b) {
-          let roomNameA = a.level.toUpperCase();
-          let roomNameB = b.level.toUpperCase();
+          let roomNameA =
+            a.level.toUpperCase() == 'PRÍZEMIE'
+              ? '0'
+              : a.level.toUpperCase() == 'SUTERÉN (-1. POSCHODIE)'
+              ? '-1'
+              : a.level.toUpperCase();
+          let roomNameB =
+            b.level.toUpperCase() == 'PRÍZEMIE'
+              ? '0'
+              : b.level.toUpperCase() == 'SUTERÉN (-1. POSCHODIE)'
+              ? '-1'
+              : b.level.toUpperCase();
           if (roomNameA < roomNameB) {
             return -1;
           }
@@ -217,6 +228,17 @@ const Main = (props) => {
               item.body = '';
             }
             item.title = filteredRooms[i].roomType.name;
+          }
+          if (
+            i == 0 ||
+            filteredRooms[i].level != filteredRooms[i - 1].level ||
+            filteredRooms[i].roomType.idRoomType !=
+              filteredRooms[i - 1].roomType.idRoomType
+          ) {
+            item.body =
+              item.body +
+              (item.body == '' ? '&' : ';&') +
+              filteredRooms[i].level;
           }
           item.body =
             item.body +
@@ -268,7 +290,7 @@ const Main = (props) => {
                             <Text
                               style={{
                                 fontSize: 20,
-                                padding: 5,
+                                paddingTop: 5,
                                 color: 'rgb(255,215,0)',
                                 fontWeight: 'bold',
                               }}>
@@ -297,6 +319,14 @@ const Main = (props) => {
       setShowRoute(false);
     } else {
       setShowRoute(true);
+      setShowFooter(false)
+      map.animateCamera({
+        center: {
+          latitude: 48.733033959741185,
+          longitude: 21.24518905793565,
+        },
+        zoom: 15.7,
+      });
     }
   };
 
@@ -355,11 +385,13 @@ const Main = (props) => {
 
       let markerToPress;
       markers.map((m) => {
-        if (m.title == markerName.split('-')[0] || m.title == markerName.split('_')[0]) {
+        if (
+          m.title == markerName.split('-')[0] ||
+          m.title == markerName.split('_')[0]
+        ) {
           if (
             m.title == 'L9' &&
-            (m.description.includes(markerName.split('-')[1].slice(0, 1)) ||
-            m.description.includes(markerName.split('_')[1].slice(0, 1)))
+            m.description.includes(markerName.split('-')[1].slice(0, 1))
           ) {
             markerToPress = m;
             markerRef[m.id - 1].showCallout();
@@ -415,7 +447,7 @@ const Main = (props) => {
             <View style={styles.settingsMenu}>
               <View style={{justifyContent: 'center', alignContent: 'center'}}>
                 <Pressable
-                android_ripple={{color:'rgb(255,215,0)', borderless: "true"}}
+                  android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}
                   onPress={() => {
                     setShowSettings(false);
                   }}>
@@ -446,7 +478,7 @@ const Main = (props) => {
                 loadSchedule={loadScheduleAfterLoad}
                 style={styles.menuButton}></ChooseiCal>
               <Pressable
-              android_ripple={{color:'rgb(255,215,0)', borderless: "true"}}
+                android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}
                 onPress={() => {
                   props.navigation.navigate('Schedule', {
                     schedule: schedule,
@@ -457,11 +489,10 @@ const Main = (props) => {
                 <Text style={styles.menuButton}>Show Schedule</Text>
               </Pressable>
               <Pressable
-              android_ripple={{color:'rgb(255,215,0)', borderless: "true"}}
+                android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}
                 onPress={() => {
                   props.navigation.navigate('CP');
-                }}
-                >
+                }}>
                 <Text style={styles.menuButton}>Navigate</Text>
               </Pressable>
               <View
@@ -521,7 +552,7 @@ const Main = (props) => {
         loadingEnabled={true}
         rotateEnabled={false}
         showsCompass={false}
-        showsUserLocation={false}
+        showsUserLocation={true}
         onPress={() => {
           setShowFooter(false);
           map.animateCamera({
@@ -568,7 +599,7 @@ const Main = (props) => {
             }}
             title={marker.title}
             description={marker.description}
-            image={markerImage}
+            image={(marker.fetch_attribute != null) ? canteenImage : markerImage}
           />
         ))}
 
