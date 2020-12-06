@@ -75,16 +75,21 @@ const Main = (props) => {
     }
   }
 
-  useEffect(function () {
-    if (time < 0.1) {
-      setShowRoute(false)
-    }
-  }, [time]);
+  useEffect(
+    function () {
+      if (time < 0.1) {
+        setShowRoute(false);
+      }
+    },
+    [time],
+  );
 
   async function loadSchedule() {
+    setScheduleLoaded(false);
     const schedulePath = FileSystem.documentDirectory.concat(
       'jsonizedIcs.json',
     );
+
     const fileInfo = await FileSystem.getInfoAsync(schedulePath);
     if (fileInfo.exists) {
       const schedule = await FileSystem.readAsStringAsync(schedulePath);
@@ -459,12 +464,9 @@ const Main = (props) => {
   );
 
   async function loadScheduleAfterLoad() {
-    if (!scheduleLoaded) {
+      setScheduleLoaded(false);
       await loadSchedule();
       setScheduleLoaded(true);
-    } else {
-      setScheduleLoaded(false);
-    }
   }
 
   const Settings = (mapStyle) => {
@@ -513,11 +515,13 @@ const Main = (props) => {
               <Pressable
                 android_ripple={{color: 'rgb(255,215,0)', borderless: 'true'}}
                 onPress={() => {
-                  props.navigation.navigate('Schedule', {
-                    schedule: schedule,
-                    setMarkerName: setMarkerName,
-                    setMarkerNameFromSchedule: setMarkerNameFromSchedule,
-                  });
+                  if (scheduleLoaded) {
+                    props.navigation.navigate('Schedule', {
+                      schedule: schedule,
+                      setMarkerName: setMarkerName,
+                      setMarkerNameFromSchedule: setMarkerNameFromSchedule,
+                    });
+                  }
                 }}>
                 <Text style={styles.menuButton}>Show Schedule</Text>
               </Pressable>
@@ -648,7 +652,15 @@ const Main = (props) => {
             backgroundColor: 'rgb(21,21,21)',
             borderRadius: 5,
           }}>
-          <Text style={{fontSize: 20, padding: 5, height: 40, textAlign:'center', color: 'rgb(255,215,0)', fontWeight: 'bold'}}>
+          <Text
+            style={{
+              fontSize: 20,
+              padding: 5,
+              height: 40,
+              textAlign: 'center',
+              color: 'rgb(255,215,0)',
+              fontWeight: 'bold',
+            }}>
             {parseInt(time) == 0 ? 1 : parseInt(time)} min
           </Text>
         </View>

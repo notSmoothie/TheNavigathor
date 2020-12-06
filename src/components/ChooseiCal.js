@@ -50,12 +50,20 @@ const ChooseiCal = (props) => {
         'jsonizedIcs.json',
       );
 
+      const fileInfo = await FileSystem.getInfoAsync(cacheFilePath);
+      if (fileInfo.exists) {
+        await FileSystem.deleteAsync(cacheFilePath, {
+          idempotent: true,
+        });
+      }
+
       const string = await convert(icsFile);
       await FileSystem.writeAsStringAsync(
         cacheFilePath,
         JSON.stringify(string),
       );
-      props.loadSchedule();
+
+      await props.loadSchedule();
     } catch (err) {
       if (DocumentPicker.isCancel) {
         return;
