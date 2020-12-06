@@ -486,6 +486,11 @@ const styles = StyleSheet.create({
   },
   predmet: {
     padding: '3%',
+    borderWidth: 1,
+    borderColor: 'rgb(255,215,0)',
+    borderRadius: 10,
+    marginTop: 5,
+    marginBottom: 5
   },
   day: {
     backgroundColor: 'rgb(255,215,0)',

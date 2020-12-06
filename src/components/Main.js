@@ -318,8 +318,8 @@ const Main = (props) => {
     if (showRoute == true) {
       map.animateCamera({
         center: {
-          latitude: parseFloat(markers[latestMarkerId].latlng.split(',')[0]),
-          longitude: parseFloat(markers[latestMarkerId].latlng.split(',')[1]),
+          latitude: 48.733033959741185,
+          longitude: 21.24518905793565,
         },
         zoom: 15.7,
       });
@@ -410,7 +410,7 @@ const Main = (props) => {
         }
       });
       setLatestMarkerId(markerToPress.id - 1);
-      getRoomsInBuilding(markerToPress.id - 1);
+      getRoomsInBuilding(markerToPress.id);
       setShowFooter(true);
 
       map.animateCamera({
