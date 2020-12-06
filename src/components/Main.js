@@ -316,10 +316,16 @@ const Main = (props) => {
 
   const navigateMeToMarker = () => {
     if (showRoute == true) {
+      map.animateCamera({
+        center: {
+          latitude: parseFloat(markers[latestMarkerId].latlng.split(',')[0]),
+          longitude: parseFloat(markers[latestMarkerId].latlng.split(',')[1]),
+        },
+        zoom: 15.7,
+      });
       setShowRoute(false);
-    } else {
-      setShowRoute(true);
       setShowFooter(false)
+    } else {
       map.animateCamera({
         center: {
           latitude: 48.733033959741185,
@@ -327,6 +333,8 @@ const Main = (props) => {
         },
         zoom: 15.7,
       });
+      setShowRoute(true);
+      setShowFooter(false)
     }
   };
 
